@@ -4,20 +4,469 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English for Schools - Prospect 3</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* دکمه‌های کنترل */
+        .control-btn {
+            position: fixed;
+            top: 20px;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+
+        #musicToggle {
+            left: 20px;
+        }
+
+        #helpBtn {
+            right: 20px;
+        }
+
+        /* اطلاعات طراح */
+        .designer-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px 18px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .designer-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-left: 12px;
+            border: 2px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .designer-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .designer-name {
+            font-size: 0.75em;
+            color: #444;
+            text-align: center;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* صفحه اصلی */
+        .main-header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .main-title {
+            font-size: 3.5em;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .sub-title {
+            font-size: 2.2em;
+            color: #f8f9fa;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .lessons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            backdrop-filter: blur(5px);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+            background: white;
+        }
+
+        .lesson-card h3 {
+            font-size: 1.7em;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .lesson-card p {
+            color: #666;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+
+        /* صفحه درس */
+        .lesson-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-left: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+            transform: translateX(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .lesson-title {
+            font-size: 2em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .lesson-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .section-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-weight: 500;
+        }
+
+        .section-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        }
+
+        .section-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+            backdrop-filter: blur(5px);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .text-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        .clickable-word {
+            color: #667eea;
+            cursor: pointer;
+            border-bottom: 1px dashed #667eea;
+            transition: all 0.2s ease;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        .clickable-word:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-bottom-style: solid;
+        }
+
+        .audio-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 20px auto;
+        }
+
+        .audio-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* دیکشنری شناور */
+        .dictionary-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            width: 90%;
+            max-width: 500px;
+            animation: popIn 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .popup-content {
+            padding: 25px;
+            position: relative;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 1.8em;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .close-popup:hover {
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        .word-title {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .word-info p {
+            margin: 12px 0;
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+
+        .word-info strong {
+            color: #555;
+        }
+
+        .example-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .example-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        /* انیمیشن‌ها */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.7);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* واکنش‌گرایی */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5em;
+            }
+            
+            .sub-title {
+                font-size: 1.8em;
+            }
+            
+            .lessons-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .designer-info {
+                position: relative;
+                bottom: auto;
+                left: auto;
+                margin-top: 40px;
+                justify-content: center;
+                width: fit-content;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .lesson-title {
+                font-size: 1.6em;
+            }
+            
+            .section-content {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .sub-title {
+                font-size: 1.5em;
+            }
+            
+            .lesson-card {
+                padding: 25px 20px;
+            }
+            
+            .lesson-card h3 {
+                font-size: 1.5em;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1em;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- موسیقی زمینه -->
     <audio id="bgMusic" loop>
-        <source src="background-music.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
     
     <!-- دکمه پخش موسیقی -->
-    <button id="musicToggle" class="music-btn">🎵</button>
+    <button id="musicToggle" class="control-btn">🎵</button>
     
     <!-- دکمه راهنما -->
-    <button id="helpBtn" class="help-btn">راهنما</button>
+    <button id="helpBtn" class="control-btn">?</button>
+    
+    <!-- اطلاعات طراح -->
+    <div class="designer-info">
+        <img src="https://s34.picofile.com/file/8488183492/2.png" alt="Designer" class="designer-img">
+        <div class="designer-name">Designer<br>A.R. Yousefzadeh</div>
+    </div>
     
     <!-- صفحه اصلی -->
     <div id="mainPage" class="page active">
@@ -25,11 +474,6 @@
             <h1 class="main-title">English for Schools</h1>
             <h2 class="sub-title">Prospect 3</h2>
         </header>
-        
-        <div class="designer-info">
-            <img src="https://s34.picofile.com/file/8488183492/2.png" alt="Designer" class="designer-img">
-            <p class="designer-name">Designer<br>A.R. Yousefzadeh</p>
-        </div>
         
         <div class="lessons-container">
             <div class="lesson-card" data-lesson="1">
@@ -40,21 +484,43 @@
                 <h3>Lesson 2</h3>
                 <p>Travel</p>
             </div>
-            <!-- سایر دروس -->
+            <div class="lesson-card" data-lesson="3">
+                <h3>Lesson 3</h3>
+                <p>Festivals and Ceremonies</p>
+            </div>
+            <div class="lesson-card" data-lesson="4">
+                <h3>Lesson 4</h3>
+                <p>Services</p>
+            </div>
+            <div class="lesson-card" data-lesson="5">
+                <h3>Lesson 5</h3>
+                <p>Media</p>
+            </div>
+            <div class="lesson-card" data-lesson="6">
+                <h3>Lesson 6</h3>
+                <p>Health and Injuries</p>
+            </div>
         </div>
     </div>
     
     <!-- صفحه درس -->
     <div id="lessonPage" class="page">
         <header class="lesson-header">
-            <button id="backToMain" class="back-btn">← بازگشت</button>
-            <h1 id="lessonTitle">Lesson 1: Personality</h1>
+            <button id="backToMain" class="back-btn">← بازگشت به صفحه اصلی</button>
+            <h1 id="lessonTitle" class="lesson-title">Lesson 1: Personality</h1>
         </header>
         
         <div class="lesson-sections">
             <button class="section-btn" data-section="conversation">Conversation</button>
             <button class="section-btn" data-section="practice">Practice 1&2</button>
-            <!-- سایر بخش‌ها -->
+            <button class="section-btn" data-section="language">Language Melody</button>
+            <button class="section-btn" data-section="grammar">Grammar</button>
+            <button class="section-btn" data-section="findit">Find It</button>
+            <button class="section-btn" data-section="listening">Listening</button>
+            <button class="section-btn" data-section="roleplay">Role Play</button>
+            <button class="section-btn" data-section="photodict">Photo Dictionary</button>
+            <button class="section-btn" data-section="workbook">Workbook</button>
+            <button class="section-btn" data-section="quiz">Quiz</button>
         </div>
         
         <div id="sectionContent" class="section-content">
@@ -66,7 +532,7 @@
     <div id="dictionaryPopup" class="dictionary-popup">
         <div class="popup-content">
             <span class="close-popup">&times;</span>
-            <h3 id="wordTitle"></h3>
+            <h3 id="wordTitle" class="word-title"></h3>
             <div class="word-info">
                 <p><strong>تلفظ:</strong> <span id="wordPronunciation"></span></p>
                 <p><strong>معنی:</strong> <span id="wordMeaning"></span></p>
@@ -74,7 +540,7 @@
                 <p><strong>کلمات مرتبط:</strong> <span id="relatedWords"></span></p>
             </div>
             <div class="example-section">
-                <h4>مثال:</h4>
+                <h4 class="example-title">مثال:</h4>
                 <p id="wordExample"></p>
                 <p id="exampleTranslation"></p>
                 <button id="playExample" class="audio-btn">🔊 پخش مثال</button>
@@ -82,329 +548,16 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
-/* styles.css */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Vazirmatn', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
-    overflow-x: hidden;
-}
-
-.page {
-    display: none;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.page.active {
-    display: block;
-}
-
-.music-btn, .help-btn {
-    position: fixed;
-    top: 20px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    cursor: pointer;
-    font-size: 1.2em;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.music-btn {
-    left: 20px;
-}
-
-.help-btn {
-    right: 20px;
-}
-
-.music-btn:hover, .help-btn:hover {
-    transform: scale(1.1);
-    background: white;
-}
-
-.main-header {
-    text-align: center;
-    margin-bottom: 40px;
-    animation: fadeInDown 1s ease;
-}
-
-.main-title {
-    font-size: 3em;
-    color: white;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    margin-bottom: 10px;
-}
-
-.sub-title {
-    font-size: 2em;
-    color: #f8f9fa;
-    opacity: 0.9;
-}
-
-.designer-info {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 10px 15px;
-    border-radius: 25px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: fadeInUp 1s ease;
-}
-
-.designer-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-left: 10px;
-    border: 2px solid #667eea;
-}
-
-.designer-name {
-    font-size: 0.8em;
-    color: #333;
-    text-align: center;
-    line-height: 1.4;
-}
-
-.lessons-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.lesson-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 30px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border: 2px solid transparent;
-}
-
-.lesson-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    border-color: #667eea;
-}
-
-.lesson-card h3 {
-    font-size: 1.5em;
-    color: #667eea;
-    margin-bottom: 10px;
-}
-
-.lesson-card p {
-    color: #666;
-    font-size: 1.1em;
-}
-
-/* استایل‌های بخش‌های درس */
-.lesson-header {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.back-btn {
-    background: #667eea;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-left: 20px;
-    transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-    background: #5a6fd8;
-    transform: translateX(-5px);
-}
-
-.lesson-sections {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
-}
-
-.section-btn {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.section-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
-.section-content {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    min-height: 400px;
-}
-
-/* دیکشنری شناور */
-.dictionary-popup {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    z-index: 2000;
-    width: 90%;
-    max-width: 500px;
-    animation: popIn 0.3s ease;
-}
-
-.popup-content {
-    padding: 20px;
-    position: relative;
-}
-
-.close-popup {
-    position: absolute;
-    top: 10px;
-    left: 15px;
-    font-size: 1.5em;
-    cursor: pointer;
-    color: #666;
-}
-
-.word-info p {
-    margin: 10px 0;
-    line-height: 1.6;
-}
-
-.example-section {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
-}
-
-.audio-btn {
-    background: #28a745;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.audio-btn:hover {
-    background: #218838;
-    transform: scale(1.05);
-}
-
-/* انیمیشن‌ها */
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes popIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-}
-
-/* واکنش‌گرایی */
-@media (max-width: 768px) {
-    .main-title {
-        font-size: 2em;
-    }
-    
-    .sub-title {
-        font-size: 1.5em;
-    }
-    
-    .lessons-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .lesson-sections {
-        grid-template-columns: 1fr;
-    }
-    
-    .designer-info {
-        position: relative;
-        bottom: auto;
-        left: auto;
-        margin-top: 30px;
-        justify-content: center;
-    }
-}
-// script.js
-document.addEventListener('DOMContentLoaded', function() {
-    // داده‌های درس‌ها
-    const lessonsData = {
-        1: {
-            title: "Lesson 1: Personality",
-            sections: {
-                conversation: {
-                    title: "Conversation",
-                    content: `Ehsan: Who is your best friend at school?
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // داده‌های درس‌ها
+            const lessonsData = {
+                1: {
+                    title: "Lesson 1: Personality",
+                    sections: {
+                        conversation: {
+                            title: "Conversation",
+                            content: `Ehsan: Who is your best friend at school?
 Parham: Reza.
 Ehsan: What's he like?
 Parham: Oh, he is really great! He's clever and kind.
@@ -412,11 +565,11 @@ Ehsan: Is he hard-working too?
 Parham: Yes! And he's always very helpful.
 Ehsan: How?
 Parham: He always helps me with my lessons.`,
-                    audio: "conversation1.mp3"
-                },
-                practice: {
-                    title: "Practice 1&2",
-                    content: `Practice 1 → Talking about personality (1)
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        practice: {
+                            title: "Practice 1&2",
+                            content: `Practice 1 → Talking about personality (1)
 - Are you hard-working? Yes, I am.
 - Is he clever? Yes, he is.
 - Is Zahra talkative? No, she isn't.
@@ -430,232 +583,431 @@ Practice 2 → Talking about personality (2)
 - What's she like? She is clever.
 - What are you like? I'm a bit serious.
 - What are they like? They are very kind.`,
-                    audio: "practice1.mp3"
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        language: {
+                            title: "Language Melody",
+                            content: `Listen to the conversation and pay attention to the intonations of 'affirmative' sentences.
+
+Teacher: Farzaneh is a clever student. Everybody likes her.
+Samira: Yes. I know. She is also very helpful.
+Teacher: Well, you can ask her for help.
+Samira: Ok, I'll ask her to help me with my English.
+
+Listen to the sentences below and then practice.
+
+1. He's very kind.
+2. She's very patient.
+3. You are very clever.
+4. Everybody likes her.
+5. I do my homework.
+6. She works for a company.`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        grammar: {
+                            title: "Grammar",
+                            content: `Look at the tables below and listen to your teacher's explanations.
+
+Affirmative
+I am
+He is
+She is happy.
+We are
+You are
+They are
+
+Ali is clever.
+It is red.
+Zahra and Nadia are generous.
+
+Question
+Am I
+Is he
+Is she careful?
+Are we
+Are you
+Are they
+
+I am not talkative.
+He is not shy.
+They are not rude.`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        findit: {
+                            title: "Find It",
+                            content: `Find and underline "to be" verbs in the passage below.
+
+I'm Mohsen. This is my classroom. There are 25 students in my class. I have a lot of friends. My best friend is Vahid. He's a good student. He is helpful and hard-working, but he is not very careful. He usually forgets important things. It's a big problem.`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        listening: {
+                            title: "Listening",
+                            content: `A) Listen to the conversation and fill out the table below.
+
+Name: ________
+Personality: ________
+
+B) Listen to the audio and answer the questions below.
+
+1. What's Iran like?
+Iran is a ...... country.
+
+2. What are Iranian people like?
+Iranian people are......, ......, ...... and .......`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        roleplay: {
+                            title: "Role Play",
+                            content: `Talk with your classmates about the personality of your friends/ classmates/ teachers/ relatives.
+
+Example dialogue:
+Student A: What's your math teacher like?
+Student B: He's very patient and kind. He always helps us with difficult problems.
+Student A: That's great! My English teacher is very funny and creative.`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        photodict: {
+                            title: "Photo Dictionary",
+                            content: `Personality Words:
+- Angry: عصبانی
+- Brave: شجاع
+- Careless: بی‌دقت
+- Clever: باهوش
+- Funny: بامزه
+- Kind: مهربان
+- Hard-working: سخت‌کوش
+- Helpful: کمک‌کننده`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        },
+                        workbook: {
+                            title: "Workbook",
+                            content: `Workbook exercises for Lesson 1 will be displayed here.
+
+Students can complete interactive exercises and check their answers.`,
+                            audio: null
+                        },
+                        quiz: {
+                            title: "Quiz",
+                            content: `Take a 20-point quiz to test your understanding of Lesson 1.
+
+The quiz includes multiple choice questions, fill-in-the-blanks, and matching exercises.`,
+                            audio: null
+                        }
+                    }
                 },
-                // سایر بخش‌ها
-            },
-            workbook: [
-                {
-                    question: "Kate isn't/aren't funny.",
-                    type: "choice",
-                    options: ["isn't", "aren't"],
-                    answer: "isn't"
+                2: {
+                    title: "Lesson 2: Travel",
+                    sections: {
+                        conversation: {
+                            title: "Conversation",
+                            content: `Receptionist: Welcome to our hotel sir, how can I help you?
+Tourist: My name is Paul Kress. I'm from Germany. I have a reservation here.
+Receptionist: I see! Are you staying here for two nights?
+Tourist: Yes, my wife and I are visiting Tehran for three days.
+Receptionist: Where is she now? I need to check her passport.
+Tourist: She's standing over there, by the gift shop. Here is her passport.
+Receptionist: Thank you. This is your key. It's room 213. Hope you enjoy your stay in Tehran.`,
+                            audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                        }
+                        // سایر بخش‌های درس 2
+                    }
+                }
+                // سایر دروس
+            };
+
+            // دیکشنری کلمات
+            const wordDictionary = {
+                "friend": {
+                    pronunciation: "/frend/",
+                    meaning: "دوست",
+                    synonyms: "companion, pal",
+                    relatedWords: "friendship, friendly",
+                    example: "My best friend is very kind.",
+                    exampleTranslation: "بهترین دوست من بسیار مهربان است."
                 },
-                // سایر سوالات
-            ],
-            quiz: [
-                {
-                    question: "What does 'brave' mean?",
-                    type: "multiple",
-                    options: ["شجاع", "مهربان", "کمک کننده", "خجالتی"],
-                    answer: "شجاع"
+                "clever": {
+                    pronunciation: "/ˈklev.ər/",
+                    meaning: "باهوش، زرنگ",
+                    synonyms: "smart, intelligent",
+                    relatedWords: "cleverness, cleverly",
+                    example: "She is a clever student.",
+                    exampleTranslation: "او یک دانش‌آموز باهوش است."
                 },
-                // سایر سوالات آزمون
-            ]
-        },
-        // سایر دروس
-    };
+                "kind": {
+                    pronunciation: "/kaɪnd/",
+                    meaning: "مهربان",
+                    synonyms: "nice, gentle",
+                    relatedWords: "kindness, kindly",
+                    example: "He is a kind person.",
+                    exampleTranslation: "او یک فرد مهربان است."
+                },
+                "hard-working": {
+                    pronunciation: "/ˌhɑːrd ˈwɜːr.kɪŋ/",
+                    meaning: "سخت‌کوش",
+                    synonyms: "diligent, industrious",
+                    relatedWords: "hard work, worker",
+                    example: "She is a hard-working student.",
+                    exampleTranslation: "او یک دانش‌آموز سخت‌کوش است."
+                },
+                "helpful": {
+                    pronunciation: "/ˈhelp.fəl/",
+                    meaning: "کمک‌کننده",
+                    synonyms: "useful, supportive",
+                    relatedWords: "help, helpless",
+                    example: "The teacher is very helpful.",
+                    exampleTranslation: "معلم بسیار کمک‌کننده است."
+                },
+                "reservation": {
+                    pronunciation: "/ˌrez.ərˈveɪ.ʃən/",
+                    meaning: "رزرواسیون",
+                    synonyms: "booking, appointment",
+                    relatedWords: "reserve, reserved",
+                    example: "I have a hotel reservation.",
+                    exampleTranslation: "من یک رزرو هتل دارم."
+                },
+                "passport": {
+                    pronunciation: "/ˈpæs.pɔːrt/",
+                    meaning: "گذرنامه",
+                    synonyms: "ID, document",
+                    relatedWords: "pass, port",
+                    example: "I need my passport to travel.",
+                    exampleTranslation: "برای سفر به گذرنامه نیاز دارم."
+                }
+            };
 
-    // متغیرهای جهانی
-    let currentLesson = null;
-    let currentSection = null;
-    const bgMusic = document.getElementById('bgMusic');
-    const musicToggle = document.getElementById('musicToggle');
-    let isMusicPlaying = false;
+            // متغیرهای جهانی
+            let currentLesson = null;
+            let currentSection = null;
+            const bgMusic = document.getElementById('bgMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            let isMusicPlaying = false;
 
-    // راه‌اندازی اولیه
-    initializeApp();
+            // راه‌اندازی اولیه
+            initializeApp();
 
-    function initializeApp() {
-        setupEventListeners();
-        loadMainPage();
-    }
-
-    function setupEventListeners() {
-        // دکمه موسیقی
-        musicToggle.addEventListener('click', toggleMusic);
-        
-        // دکمه راهنما
-        document.getElementById('helpBtn').addEventListener('click', showHelp);
-        
-        // دکمه بازگشت
-        document.getElementById('backToMain').addEventListener('click', loadMainPage);
-        
-        // کلیک روی کارت‌های درس
-        document.querySelectorAll('.lesson-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const lessonNum = this.getAttribute('data-lesson');
-                loadLessonPage(lessonNum);
-            });
-        });
-        
-        // دکمه‌های بخش‌های درس
-        document.querySelectorAll('.section-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const section = this.getAttribute('data-section');
-                loadSectionContent(section);
-            });
-        });
-        
-        // بستن پاپ‌آپ دیکشنری
-        document.querySelector('.close-popup').addEventListener('click', closeDictionary);
-    }
-
-    function toggleMusic() {
-        if (isMusicPlaying) {
-            bgMusic.pause();
-            musicToggle.textContent = '🔇';
-        } else {
-            bgMusic.play().catch(e => console.log('اتوماتیک پخش موسیقی مجاز نیست'));
-            musicToggle.textContent = '🎵';
-        }
-        isMusicPlaying = !isMusicPlaying;
-    }
-
-    function showHelp() {
-        alert('راهنمای استفاده از کتاب:\n\n- برای پخش موسیقی زمینه روی دکمه 🎵 کلیک کنید\n- برای انتخاب درس روی کارت درس مورد نظر کلیک کنید\n- در هر درس می‌توانید به بخش‌های مختلف دسترسی پیدا کنید\n- روی کلمات کلیک کنید تا معنی و اطلاعات آنها نمایش داده شود');
-    }
-
-    function loadMainPage() {
-        document.getElementById('mainPage').classList.add('active');
-        document.getElementById('lessonPage').classList.remove('active');
-        currentLesson = null;
-    }
-
-    function loadLessonPage(lessonNum) {
-        currentLesson = lessonNum;
-        const lessonData = lessonsData[lessonNum];
-        
-        document.getElementById('lessonTitle').textContent = lessonData.title;
-        document.getElementById('mainPage').classList.remove('active');
-        document.getElementById('lessonPage').classList.add('active');
-        
-        // بارگذاری محتوای پیش‌فرض
-        loadSectionContent('conversation');
-    }
-
-    function loadSectionContent(section) {
-        currentSection = section;
-        const sectionData = lessonsData[currentLesson].sections[section];
-        const contentDiv = document.getElementById('sectionContent');
-        
-        contentDiv.innerHTML = `
-            <h2>${sectionData.title}</h2>
-            <div class="text-content" id="interactiveText">${formatTextWithClickableWords(sectionData.content)}</div>
-            ${sectionData.audio ? `<button class="audio-section-btn" onclick="playSectionAudio('${sectionData.audio}')">🔊 پخش فایل صوتی</button>` : ''}
-        `;
-        
-        // فعال کردن قابلیت کلیک روی کلمات
-        setupWordClickListeners();
-    }
-
-    function formatTextWithClickableWords(text) {
-        // این تابع متن را به کلمات قابل کلیک تبدیل می‌کند
-        return text.split(/(\s+)/).map(word => {
-            if (word.trim().length > 0 && /[a-zA-Z]/.test(word)) {
-                return `<span class="clickable-word" data-word="${word.trim()}">${word}</span>`;
+            function initializeApp() {
+                setupEventListeners();
+                // تلاش برای پخش خودکار موسیقی (ممکن است در برخی مرورگرها کار نکند)
+                setTimeout(() => {
+                    if (!isMusicPlaying) {
+                        toggleMusic();
+                    }
+                }, 1000);
             }
-            return word;
-        }).join('');
-    }
 
-    function setupWordClickListeners() {
-        document.querySelectorAll('.clickable-word').forEach(word => {
-            word.addEventListener('click', function() {
-                const wordText = this.getAttribute('data-word');
-                showWordInfo(wordText);
-            });
+            function setupEventListeners() {
+                // دکمه موسیقی
+                musicToggle.addEventListener('click', toggleMusic);
+                
+                // دکمه راهنما
+                document.getElementById('helpBtn').addEventListener('click', showHelp);
+                
+                // دکمه بازگشت
+                document.getElementById('backToMain').addEventListener('click', loadMainPage);
+                
+                // کلیک روی کارت‌های درس
+                document.querySelectorAll('.lesson-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const lessonNum = this.getAttribute('data-lesson');
+                        loadLessonPage(lessonNum);
+                    });
+                });
+                
+                // دکمه‌های بخش‌های درس
+                document.querySelectorAll('.section-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const section = this.getAttribute('data-section');
+                        loadSectionContent(section);
+                    });
+                });
+                
+                // بستن پاپ‌آپ دیکشنری
+                document.querySelector('.close-popup').addEventListener('click', closeDictionary);
+                
+                // پخش مثال در دیکشنری
+                document.getElementById('playExample').addEventListener('click', playExampleAudio);
+                
+                // بستن دیکشنری با کلیک خارج از آن
+                document.addEventListener('click', function(event) {
+                    const popup = document.getElementById('dictionaryPopup');
+                    if (event.target === popup) {
+                        closeDictionary();
+                    }
+                });
+            }
+
+            function toggleMusic() {
+                if (isMusicPlaying) {
+                    bgMusic.pause();
+                    musicToggle.textContent = '🔇';
+                } else {
+                    bgMusic.play().catch(e => {
+                        console.log('اتوماتیک پخش موسیقی مجاز نیست');
+                        alert('برای پخش موسیقی، لطفا یک بار روی صفحه کلیک کنید');
+                    });
+                    musicToggle.textContent = '🎵';
+                }
+                isMusicPlaying = !isMusicPlaying;
+            }
+
+            function showHelp() {
+                alert('راهنمای استفاده از کتاب:\n\n- برای پخش/توقف موسیقی زمینه روی دکمه 🎵 کلیک کنید\n- برای انتخاب درس روی کارت درس مورد نظر کلیک کنید\n- در هر درس می‌توانید به بخش‌های مختلف دسترسی پیدا کنید\n- روی کلمات انگلیسی کلیک کنید تا معنی و اطلاعات آنها نمایش داده شود\n- از دکمه‌های 🔊 برای پخش فایل‌های صوتی استفاده کنید');
+            }
+
+            function loadMainPage() {
+                document.getElementById('mainPage').classList.add('active');
+                document.getElementById('lessonPage').classList.remove('active');
+                currentLesson = null;
+            }
+
+            function loadLessonPage(lessonNum) {
+                currentLesson = lessonNum;
+                const lessonData = lessonsData[lessonNum];
+                
+                if (!lessonData) {
+                    alert('این درس هنوز آماده نیست!');
+                    return;
+                }
+                
+                document.getElementById('lessonTitle').textContent = lessonData.title;
+                document.getElementById('mainPage').classList.remove('active');
+                document.getElementById('lessonPage').classList.add('active');
+                
+                // بارگذاری محتوای پیش‌فرض
+                loadSectionContent('conversation');
+            }
+
+            function loadSectionContent(section) {
+                if (!currentLesson) return;
+                
+                currentSection = section;
+                const sectionData = lessonsData[currentLesson].sections[section];
+                
+                if (!sectionData) {
+                    document.getElementById('sectionContent').innerHTML = `
+                        <h2 class="section-title">${section}</h2>
+                        <div class="text-content">این بخش به زودی اضافه خواهد شد.</div>
+                    `;
+                    return;
+                }
+                
+                const contentDiv = document.getElementById('sectionContent');
+                
+                contentDiv.innerHTML = `
+                    <h2 class="section-title">${sectionData.title}</h2>
+                    <div class="text-content" id="interactiveText">${formatTextWithClickableWords(sectionData.content)}</div>
+                    ${sectionData.audio ? `
+                        <button class="audio-btn" onclick="playSectionAudio('${sectionData.audio}')">
+                            🔊 پخش فایل صوتی این بخش
+                        </button>
+                    ` : ''}
+                `;
+                
+                // فعال کردن قابلیت کلیک روی کلمات
+                setupWordClickListeners();
+            }
+
+            function formatTextWithClickableWords(text) {
+                // این تابع متن را به کلمات قابل کلیک تبدیل می‌کند
+                return text.split(/(\s+)/).map(word => {
+                    const cleanWord = word.trim().replace(/[.,?!;:'"]/g, '');
+                    if (cleanWord.length > 0 && /[a-zA-Z]/.test(cleanWord) && wordDictionary[cleanWord.toLowerCase()]) {
+                        return `<span class="clickable-word" data-word="${cleanWord}">${word}</span>`;
+                    }
+                    return word;
+                }).join('');
+            }
+
+            function setupWordClickListeners() {
+                document.querySelectorAll('.clickable-word').forEach(word => {
+                    word.addEventListener('click', function() {
+                        const wordText = this.getAttribute('data-word');
+                        showWordInfo(wordText);
+                        // پخش صدای کلیک
+                        playClickSound();
+                    });
+                });
+            }
+
+            function playClickSound() {
+                // ایجاد صدای کلیک ساده
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            }
+
+            function showWordInfo(word) {
+                const wordData = getWordData(word);
+                
+                document.getElementById('wordTitle').textContent = word;
+                document.getElementById('wordPronunciation').textContent = wordData.pronunciation;
+                document.getElementById('wordMeaning').textContent = wordData.meaning;
+                document.getElementById('wordSynonyms').textContent = wordData.synonyms;
+                document.getElementById('relatedWords').textContent = wordData.relatedWords;
+                document.getElementById('wordExample').textContent = wordData.example;
+                document.getElementById('exampleTranslation').textContent = wordData.exampleTranslation;
+                
+                document.getElementById('dictionaryPopup').style.display = 'block';
+            }
+
+            function getWordData(word) {
+                return wordDictionary[word.toLowerCase()] || {
+                    pronunciation: "---",
+                    meaning: "معنی یافت نشد",
+                    synonyms: "---",
+                    relatedWords: "---",
+                    example: "مثال موجود نیست",
+                    exampleTranslation: "---"
+                };
+            }
+
+            function closeDictionary() {
+                document.getElementById('dictionaryPopup').style.display = 'none';
+            }
+
+            function playExampleAudio() {
+                const exampleText = document.getElementById('wordExample').textContent;
+                playTextAsAudio(exampleText);
+            }
+
+            function playSectionAudio(audioFile) {
+                // پخش فایل صوتی بخش
+                const audio = new Audio(audioFile);
+                audio.play().catch(e => {
+                    console.log('پخش صدا با مشکل مواجه شد');
+                    alert('فایل صوتی در دسترس نیست. لطفا بعدا تلاش کنید.');
+                });
+            }
+
+            function playTextAsAudio(text) {
+                // استفاده از Web Speech API برای تبدیل متن به گفتار
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1;
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    alert('مرورگر شما از قابلیت تبدیل متن به گفتار پشتیبانی نمی‌کند');
+                }
+            }
+
+            // صادر کردن توابع برای استفاده در HTML
+            window.playSectionAudio = playSectionAudio;
+            window.playTextAsAudio = playTextAsAudio;
         });
-    }
-
-    function showWordInfo(word) {
-        // داده‌های دیکشنری (در حالت واقعی از API یا دیتابیس استفاده می‌شود)
-        const wordData = getWordData(word);
-        
-        document.getElementById('wordTitle').textContent = word;
-        document.getElementById('wordPronunciation').textContent = wordData.pronunciation;
-        document.getElementById('wordMeaning').textContent = wordData.meaning;
-        document.getElementById('wordSynonyms').textContent = wordData.synonyms;
-        document.getElementById('relatedWords').textContent = wordData.relatedWords;
-        document.getElementById('wordExample').textContent = wordData.example;
-        document.getElementById('exampleTranslation').textContent = wordData.exampleTranslation;
-        
-        document.getElementById('dictionaryPopup').style.display = 'block';
-        
-        // تنظیم رویداد پخش مثال
-        document.getElementById('playExample').onclick = function() {
-            playTextAsAudio(wordData.example);
-        };
-    }
-
-    function getWordData(word) {
-        // این تابع در حالت واقعی از API یا دیتابیس استفاده می‌کند
-        const wordDictionary = {
-            "friend": {
-                pronunciation: "/frend/",
-                meaning: "دوست",
-                synonyms: "companion, pal",
-                relatedWords: "friendship, friendly",
-                example: "My best friend is very kind.",
-                exampleTranslation: "بهترین دوست من بسیار مهربان است."
-            },
-            "clever": {
-                pronunciation: "/ˈklev.ər/",
-                meaning: "باهوش، زرنگ",
-                synonyms: "smart, intelligent",
-                relatedWords: "cleverness, cleverly",
-                example: "She is a clever student.",
-                exampleTranslation: "او یک دانش‌آموز باهوش است."
-            },
-            // سایر کلمات
-        };
-        
-        return wordDictionary[word.toLowerCase()] || {
-            pronunciation: "اطلاعاتی موجود نیست",
-            meaning: "معنی یافت نشد",
-            synonyms: "---",
-            relatedWords: "---",
-            example: "مثال موجود نیست",
-            exampleTranslation: "---"
-        };
-    }
-
-    function closeDictionary() {
-        document.getElementById('dictionaryPopup').style.display = 'none';
-    }
-
-    function playSectionAudio(audioFile) {
-        // پخش فایل صوتی بخش
-        const audio = new Audio(audioFile);
-        audio.play();
-    }
-
-    function playTextAsAudio(text) {
-        // در حالت واقعی از Web Speech API استفاده می‌شود
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert('مرورگر شما از قابلیت تبدیل متن به گفتار پشتیبانی نمی‌کند');
-        }
-    }
-
-    // توابع مربوط به کتاب کار و آزمون‌ها
-    function loadWorkbook() {
-        // بارگذاری تمرینات کتاب کار
-    }
-
-    function loadQuiz() {
-        // بارگذاری آزمون
-    }
-
-    function submitQuiz() {
-        // ارسال پاسخ‌های آزمون
-    }
-
-    // صادر کردن توابع برای استفاده در HTML
-    window.playSectionAudio = playSectionAudio;
-    window.playTextAsAudio = playTextAsAudio;
-});
+    </script>
+</body>
+</html>
