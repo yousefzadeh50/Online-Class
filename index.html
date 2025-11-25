@@ -4,513 +4,267 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>کلاس آنلاین تعاملی</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* استایل‌های صحیح و کامل */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: white;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        .video-grid {
+            flex: 3;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .video-item {
+            background: #000;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .student-name {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-container {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            background: #3498db;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <header class="header">
-            <h1>کلاس آنلاین تعاملی</h1>
+            <h1>کلاس آنلاین - ریاضی پایه هفتم</h1>
             <div class="user-info">
-                <span id="username">کاربر مهمان</span>
-                <button id="muteBtn" class="btn">🔇 میکروفون</button>
-                <button id="videoBtn" class="btn">📹 دوربین</button>
+                <span>استاد: احمدی</span>
+                <span>تعداد دانش‌آموزان: <span id="studentCount">0</span></span>
             </div>
         </header>
 
         <div class="main-content">
-            <div class="video-section">
-                <div class="video-container">
-                    <video id="localVideo" autoplay muted></video>
-                    <div class="video-label">شما</div>
-                </div>
-                <div class="video-container">
-                    <video id="remoteVideo" autoplay></video>
-                    <div class="video-label">استاد</div>
-                </div>
+            <div class="video-grid" id="videoGrid">
+                <!-- ویدیوهای دانش‌آموزان在这里显示 -->
             </div>
-
-            <div class="controls">
-                <button id="shareScreenBtn" class="btn">📺 اشتراک صفحه</button>
-                <button id="chatToggle" class="btn">💬 چت</button>
-                <button id="whiteboardBtn" class="btn">📝 تخته سفید</button>
-                <button id="raiseHandBtn" class="btn">✋ دست بلند کردن</button>
-            </div>
-
-            <div class="chat-section" id="chatSection">
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message system">
-                        <span>به کلاس آنلاین خوش آمدید!</span>
+            
+            <div class="sidebar">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message system">به کلاس آنلاین خوش آمدید!</div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="پیام خود را بنویسید...">
+                        <button class="btn" onclick="sendMessage()">ارسال</button>
                     </div>
                 </div>
-                <div class="chat-input">
-                    <input type="text" id="messageInput" placeholder="پیام خود را بنویسید...">
-                    <button id="sendBtn" class="btn">ارسال</button>
+                
+                <div class="participants-list">
+                    <h3>شرکت‌کنندگان</h3>
+                    <div id="participantsList"></div>
                 </div>
             </div>
         </div>
 
-        <div class="whiteboard" id="whiteboard">
-            <canvas id="drawingCanvas"></canvas>
-            <div class="whiteboard-controls">
-                <input type="color" id="colorPicker" value="#000000">
-                <input type="range" id="brushSize" min="1" max="10" value="3">
-                <button id="clearBoard" class="btn">پاک کردن</button>
-                <button id="closeWhiteboard" class="btn">بستن</button>
-            </div>
+        <div class="controls">
+            <button class="btn" onclick="toggleMic()">🔊 میکروفون</button>
+            <button class="btn" onclick="toggleCamera()">📹 دوربین</button>
+            <button class="btn" onclick="raiseHand()">✋ دست بلند کن</button>
+            <button class="btn" onclick="shareScreen()">📺 اشتراک صفحه</button>
+            <button class="btn" onclick="openWhiteboard()">📝 تخته سفید</button>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // پیاده‌سازی پایه‌ای از WebRTC
+        class OnlineClass {
+            constructor() {
+                this.localStream = null;
+                this.connections = [];
+                this.peers = {};
+            }
+
+            async initialize() {
+                try {
+                    // دریافت دسترسی به دوربین و میکروفون
+                    this.localStream = await navigator.mediaDevices.getUserMedia({
+                        video: true,
+                        audio: true
+                    });
+                    
+                    this.setupEventListeners();
+                    this.displayLocalVideo();
+                    
+                } catch (error) {
+                    console.error('خطا در دریافت مجوزها:', error);
+                }
+            }
+
+            displayLocalVideo() {
+                const videoGrid = document.getElementById('videoGrid');
+                const videoElement = document.createElement('video');
+                videoElement.srcObject = this.localStream;
+                videoElement.autoplay = true;
+                videoElement.muted = true;
+                
+                const videoContainer = document.createElement('div');
+                videoContainer.className = 'video-item';
+                videoContainer.appendChild(videoElement);
+                
+                const nameLabel = document.createElement('div');
+                nameLabel.className = 'student-name';
+                nameLabel.textContent = 'شما';
+                videoContainer.appendChild(nameLabel);
+                
+                videoGrid.appendChild(videoContainer);
+            }
+
+            setupEventListeners() {
+                // مدیریت ارسال پیام
+                document.getElementById('messageInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+            }
+
+            sendMessage() {
+                const input = document.getElementById('messageInput');
+                const message = input.value.trim();
+                
+                if (message) {
+                    this.displayMessage(message, 'own');
+                    input.value = '';
+                    
+                    // در محیط واقعی، پیام از طریق WebSocket ارسال می‌شود
+                }
+            }
+
+            displayMessage(message, type) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                messageDiv.textContent = message;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // راه‌اندازی کلاس
+        const onlineClass = new OnlineClass();
+        onlineClass.initialize();
+
+        // توابع کنترل
+        function toggleMic() {
+            // کنترل میکروفون
+        }
+
+        function toggleCamera() {
+            // کنترل دوربین
+        }
+
+        function raiseHand() {
+            onlineClass.displayMessage('✋ دانش‌آموز دست خود را بلند کرد', 'system');
+        }
+
+        function shareScreen() {
+            // اشتراک‌گذاری صفحه
+        }
+
+        function openWhiteboard() {
+            // باز کردن تخته سفید
+        }
+    </script>
 </body>
 </html>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
-    height: 100vh;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background: white;
-    margin: 0 auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.header {
-    background: #2c3e50;
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.header h1 {
-    font-size: 1.5rem;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    gap: 1rem;
-}
-
-.video-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    flex: 1;
-    min-height: 400px;
-}
-
-.video-container {
-    position: relative;
-    background: #000;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.video-label {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.9rem;
-}
-
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
-    background: #3498db;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-}
-
-.btn:hover {
-    background: #2980b9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-.chat-section {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    height: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.chat-messages {
-    flex: 1;
-    padding: 1rem;
-    overflow-y: auto;
-    border-bottom: 1px solid #eee;
-}
-
-.message {
-    margin-bottom: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-radius: 15px;
-    max-width: 80%;
-}
-
-.message.system {
-    background: #e3f2fd;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.message.own {
-    background: #dcf8c6;
-    margin-right: auto;
-    margin-left: 0;
-}
-
-.message.other {
-    background: #fff;
-    border: 1px solid #ddd;
-    margin-left: auto;
-    margin-right: 0;
-}
-
-.chat-input {
-    display: flex;
-    padding: 1rem;
-    gap: 0.5rem;
-}
-
-.chat-input input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
-    outline: none;
-}
-
-.chat-input input:focus {
-    border-color: #3498db;
-}
-
-.whiteboard {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    border: 2px solid #333;
-    border-radius: 10px;
-    padding: 1rem;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    display: none;
-}
-
-#drawingCanvas {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: crosshair;
-}
-
-.whiteboard-controls {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    margin-top: 1rem;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-radius: 5px;
-}
-
-@media (max-width: 768px) {
-    .video-section {
-        grid-template-columns: 1fr;
-    }
-    
-    .controls {
-        flex-wrap: wrap;
-    }
-    
-    .header {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-    }
-}
-class OnlineClass {
-    constructor() {
-        this.localStream = null;
-        this.isAudioMuted = false;
-        this.isVideoOff = false;
-        this.isHandRaised = false;
-        this.isWhiteboardOpen = false;
-        this.init();
-    }
-
-    init() {
-        this.setupEventListeners();
-        this.initiateVideoCall();
-        this.setupWhiteboard();
-    }
-
-    setupEventListeners() {
-        // کنترل‌های صدا و تصویر
-        document.getElementById('muteBtn').addEventListener('click', () => this.toggleAudio());
-        document.getElementById('videoBtn').addEventListener('click', () => this.toggleVideo());
-        document.getElementById('shareScreenBtn').addEventListener('click', () => this.shareScreen());
-        document.getElementById('raiseHandBtn').addEventListener('click', () => this.raiseHand());
-        
-        // کنترل‌های چت
-        document.getElementById('chatToggle').addEventListener('click', () => this.toggleChat());
-        document.getElementById('sendBtn').addEventListener('click', () => this.sendMessage());
-        document.getElementById('messageInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
-        });
-
-        // کنترل‌های تخته سفید
-        document.getElementById('whiteboardBtn').addEventListener('click', () => this.toggleWhiteboard());
-        document.getElementById('closeWhiteboard').addEventListener('click', () => this.toggleWhiteboard());
-        document.getElementById('clearBoard').addEventListener('click', () => this.clearWhiteboard());
-    }
-
-    async initiateVideoCall() {
-        try {
-            this.localStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true
-            });
-            
-            const localVideo = document.getElementById('localVideo');
-            localVideo.srcObject = this.localStream;
-            
-            // شبیه‌سازی ویدیوی استاد (در حالت واقعی از WebRTC استفاده می‌شود)
-            this.simulateTeacherVideo();
-            
-        } catch (error) {
-            console.error('خطا در دسترسی به دوربین و میکروفون:', error);
-            this.showMessage('خطا در دسترسی به دوربین و میکروفون', 'system');
-        }
-    }
-
-    simulateTeacherVideo() {
-        // در یک محیط واقعی، این بخش با WebRTC پیاده‌سازی می‌شود
-        const remoteVideo = document.getElementById('remoteVideo');
-        // شبیه‌سازی ویدیوی استاد
-        setTimeout(() => {
-            this.showMessage('استاد به کلاس پیوست', 'system');
-        }, 2000);
-    }
-
-    toggleAudio() {
-        const audioTracks = this.localStream.getAudioTracks();
-        audioTracks.forEach(track => {
-            track.enabled = !track.enabled;
-        });
-        
-        this.isAudioMuted = !this.isAudioMuted;
-        document.getElementById('muteBtn').textContent = 
-            this.isAudioMuted ? '🔊 میکروفون' : '🔇 میکروفون';
-        
-        this.showMessage(`میکروفون ${this.isAudioMuted ? 'خاموش' : 'روشن'} شد`, 'system');
-    }
-
-    toggleVideo() {
-        const videoTracks = this.localStream.getVideoTracks();
-        videoTracks.forEach(track => {
-            track.enabled = !track.enabled;
-        });
-        
-        this.isVideoOff = !this.isVideoOff;
-        document.getElementById('videoBtn').textContent = 
-            this.isVideoOff ? '📷 دوربین' : '📹 دوربین';
-        
-        this.showMessage(`دوربین ${this.isVideoOff ? 'خاموش' : 'روشن'} شد`, 'system');
-    }
-
-    async shareScreen() {
-        try {
-            const screenStream = await navigator.mediaDevices.getDisplayMedia({
-                video: true
-            });
-            
-            const localVideo = document.getElementById('localVideo');
-            localVideo.srcObject = screenStream;
-            
-            this.showMessage('اشتراک‌گذاری صفحه شروع شد', 'system');
-            
-            screenStream.getTracks().forEach(track => {
-                track.addEventListener('ended', () => {
-                    localVideo.srcObject = this.localStream;
-                    this.showMessage('اشتراک‌گذاری صفحه پایان یافت', 'system');
-                });
-            });
-            
-        } catch (error) {
-            console.error('خطا در اشتراک‌گذاری صفحه:', error);
-        }
-    }
-
-    raiseHand() {
-        this.isHandRaised = !this.isHandRaised;
-        const button = document.getElementById('raiseHandBtn');
-        
-        if (this.isHandRaised) {
-            button.style.background = '#e74c3c';
-            button.textContent = '✋ دست پایین';
-            this.showMessage('دست شما بلند شد', 'system');
-        } else {
-            button.style.background = '#3498db';
-            button.textContent = '✋ دست بلند کردن';
-            this.showMessage('دست شما پایین آمد', 'system');
-        }
-    }
-
-    toggleChat() {
-        const chatSection = document.getElementById('chatSection');
-        chatSection.style.display = chatSection.style.display === 'none' ? 'flex' : 'none';
-    }
-
-    sendMessage() {
-        const messageInput = document.getElementById('messageInput');
-        const message = messageInput.value.trim();
-        
-        if (message) {
-            this.showMessage(message, 'own');
-            messageInput.value = '';
-            
-            // شبیه‌سازی پاسخ استاد
-            setTimeout(() => {
-                const responses = [
-                    'سوال خوبی پرسیدید!',
-                    'لطفاً کمی بیشتر توضیح دهید',
-                    'این مبحث را در جلسه بعد بررسی می‌کنیم',
-                    'آیا پاسخ من کافی بود؟'
-                ];
-                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                this.showMessage(randomResponse, 'other');
-            }, 2000);
-        }
-    }
-
-    showMessage(message, type) {
-        const chatMessages = document.getElementById('chatMessages');
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${type}`;
-        messageDiv.textContent = message;
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    setupWhiteboard() {
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // تنظیم اندازه کانواس
-        canvas.width = 800;
-        canvas.height = 500;
-        
-        let isDrawing = false;
-        let lastX = 0;
-        let lastY = 0;
-        
-        // رویدادهای رسم
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        
-        function startDrawing(e) {
-            isDrawing = true;
-            [lastX, lastY] = [e.offsetX, e.offsetY];
-        }
-        
-        function draw(e) {
-            if (!isDrawing) return;
-            
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(e.offsetX, e.offsetY);
-            ctx.strokeStyle = document.getElementById('colorPicker').value;
-            ctx.lineWidth = document.getElementById('brushSize').value;
-            ctx.lineCap = 'round';
-            ctx.stroke();
-            
-            [lastX, lastY] = [e.offsetX, e.offsetY];
-        }
-        
-        function stopDrawing() {
-            isDrawing = false;
-        }
-    }
-
-    toggleWhiteboard() {
-        const whiteboard = document.getElementById('whiteboard');
-        this.isWhiteboardOpen = !this.isWhiteboardOpen;
-        
-        if (this.isWhiteboardOpen) {
-            whiteboard.style.display = 'block';
-            this.showMessage('تخته سفید باز شد', 'system');
-        } else {
-            whiteboard.style.display = 'none';
-            this.showMessage('تخته سفید بسته شد', 'system');
-        }
-    }
-
-    clearWhiteboard() {
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-}
-
-// راه‌اندازی کلاس آنلاین هنگامی که صفحه بارگذاری شد
-document.addEventListener('DOMContentLoaded', () => {
-    new OnlineClass();
-});
