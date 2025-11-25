@@ -3,481 +3,659 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کلاس آنلاین</title>
-    <style>
-        /* استایل‌های ساده و بدون خطا */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            height: 100vh;
-        }
-        
-        .page {
-            width: 100%;
-            height: 100vh;
-            display: none;
-        }
-        
-        .active {
-            display: block;
-        }
-        
-        /* صفحه ورود */
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            padding: 20px;
-        }
-        
-        .login-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 400px;
-        }
-        
-        .login-form h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #2c3e50;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #3498db;
-            color: white;
-            width: 100%;
-            margin-top: 1rem;
-        }
-        
-        .btn-primary:hover {
-            background: #2980b9;
-        }
-        
-        /* صفحه کلاس */
-        .container {
-            height: 100vh;
-            background: white;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 1rem;
-            gap: 1rem;
-        }
-        
-        .video-section {
-            flex: 3;
-            background: #f0f0f0;
-            border-radius: 10px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .video-placeholder {
-            width: 100%;
-            height: 300px;
-            background: #333;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .sidebar {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            min-width: 300px;
-        }
-        
-        .chat-container {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            height: 400px;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            background: #f9f9f9;
-        }
-        
-        .message {
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            border-radius: 10px;
-            background: white;
-            border: 1px solid #eee;
-        }
-        
-        .chat-input {
-            display: flex;
-            padding: 1rem;
-            gap: 0.5rem;
-            border-top: 1px solid #ddd;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-top: 1px solid #ddd;
-        }
-        
-        .btn-control {
-            background: #3498db;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-        }
-    </style>
+    <title>English for Schools - Prospect 3</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- صفحه ورود -->
-    <div id="loginPage" class="page active">
-        <div class="login-container">
-            <div class="login-form">
-                <h2>ورود به کلاس آنلاین</h2>
-                
-                <div class="form-group">
-                    <label>نام کلاس:</label>
-                    <select id="className">
-                        <option value="">انتخاب کنید</option>
-                        <option value="math7">ریاضی پایه هفتم</option>
-                        <option value="science7">علوم پایه هفتم</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>نام شما:</label>
-                    <input type="text" id="userName" placeholder="نام خود را وارد کنید">
-                </div>
-                
-                <div class="form-group">
-                    <label>نقش:</label>
-                    <select id="userRole">
-                        <option value="student">دانش‌آموز</option>
-                        <option value="teacher">استاد</option>
-                    </select>
-                </div>
-                
-                <button class="btn btn-primary" onclick="joinClass()">ورود به کلاس</button>
-                
-                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
-                    <h4>لینک دعوت:</h4>
-                    <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 0.5rem;">
-                        https://myclass.com/join/123
-                    </div>
-                </div>
+    <!-- موسیقی زمینه -->
+    <audio id="bgMusic" loop>
+        <source src="background-music.mp3" type="audio/mpeg">
+    </audio>
+    
+    <!-- دکمه پخش موسیقی -->
+    <button id="musicToggle" class="music-btn">🎵</button>
+    
+    <!-- دکمه راهنما -->
+    <button id="helpBtn" class="help-btn">راهنما</button>
+    
+    <!-- صفحه اصلی -->
+    <div id="mainPage" class="page active">
+        <header class="main-header">
+            <h1 class="main-title">English for Schools</h1>
+            <h2 class="sub-title">Prospect 3</h2>
+        </header>
+        
+        <div class="designer-info">
+            <img src="https://s34.picofile.com/file/8488183492/2.png" alt="Designer" class="designer-img">
+            <p class="designer-name">Designer<br>A.R. Yousefzadeh</p>
+        </div>
+        
+        <div class="lessons-container">
+            <div class="lesson-card" data-lesson="1">
+                <h3>Lesson 1</h3>
+                <p>Personality</p>
+            </div>
+            <div class="lesson-card" data-lesson="2">
+                <h3>Lesson 2</h3>
+                <p>Travel</p>
+            </div>
+            <!-- سایر دروس -->
+        </div>
+    </div>
+    
+    <!-- صفحه درس -->
+    <div id="lessonPage" class="page">
+        <header class="lesson-header">
+            <button id="backToMain" class="back-btn">← بازگشت</button>
+            <h1 id="lessonTitle">Lesson 1: Personality</h1>
+        </header>
+        
+        <div class="lesson-sections">
+            <button class="section-btn" data-section="conversation">Conversation</button>
+            <button class="section-btn" data-section="practice">Practice 1&2</button>
+            <!-- سایر بخش‌ها -->
+        </div>
+        
+        <div id="sectionContent" class="section-content">
+            <!-- محتوای هر بخش اینجا نمایش داده می‌شود -->
+        </div>
+    </div>
+    
+    <!-- دیکشنری شناور -->
+    <div id="dictionaryPopup" class="dictionary-popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <h3 id="wordTitle"></h3>
+            <div class="word-info">
+                <p><strong>تلفظ:</strong> <span id="wordPronunciation"></span></p>
+                <p><strong>معنی:</strong> <span id="wordMeaning"></span></p>
+                <p><strong>مترادف:</strong> <span id="wordSynonyms"></span></p>
+                <p><strong>کلمات مرتبط:</strong> <span id="relatedWords"></span></p>
+            </div>
+            <div class="example-section">
+                <h4>مثال:</h4>
+                <p id="wordExample"></p>
+                <p id="exampleTranslation"></p>
+                <button id="playExample" class="audio-btn">🔊 پخش مثال</button>
             </div>
         </div>
     </div>
 
-    <!-- صفحه کلاس -->
-    <div id="classPage" class="page">
-        <div class="container">
-            <header class="header">
-                <div>
-                    <h1 id="classTitle">کلاس آنلاین</h1>
-                    <div id="classDetails">استاد: - زمان: -</div>
-                </div>
-                <div>
-                    <button class="btn" onclick="leaveClass()" style="background: #e74c3c; color: white;">خروج از کلاس</button>
-                </div>
-            </header>
-
-            <div class="main-content">
-                <div class="video-section">
-                    <div class="video-placeholder">
-                        📹 ویدیوی کلاس
-                    </div>
-                    <div style="text-align: center;">
-                        <h3 id="welcomeMessage">به کلاس خوش آمدید!</h3>
-                    </div>
-                </div>
-
-                <div class="sidebar">
-                    <div class="chat-container">
-                        <div style="padding: 1rem; border-bottom: 1px solid #ddd; background: #2c3e50; color: white; border-radius: 10px 10px 0 0;">
-                            <h3 style="margin: 0;">چت کلاس</h3>
-                        </div>
-                        <div class="chat-messages" id="chatMessages">
-                            <div class="message" style="background: #e3f2fd; text-align: center;">
-                                به کلاس آنلاین خوش آمدید!
-                            </div>
-                        </div>
-                        <div class="chat-input">
-                            <input type="text" id="messageInput" placeholder="پیام خود را بنویسید...">
-                            <button class="btn btn-primary" onclick="sendMessage()" style="width: auto;">ارسال</button>
-                        </div>
-                    </div>
-                    
-                    <div style="background: white; border: 1px solid #ddd; border-radius: 10px; padding: 1rem;">
-                        <h3>شرکت‌کنندگان</h3>
-                        <div id="participantsList" style="margin-top: 1rem;">
-                            <!-- لیست شرکت‌کنندگان -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="controls">
-                <button class="btn btn-control" onclick="toggleMic()">🎤 میکروفون</button>
-                <button class="btn btn-control" onclick="toggleCamera()">📹 دوربین</button>
-                <button class="btn btn-control" onclick="raiseHand()">✋ دست بلند کن</button>
-                <button class="btn btn-control" onclick="shareScreen()">📺 اشتراک صفحه</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // اطلاعات کلاس‌ها
-        const classes = {
-            'math7': {
-                title: 'ریاضی پایه هفتم',
-                teacher: 'استاد احمدی',
-                time: '۱۰:۰۰ - ۱۱:۳۰'
-            },
-            'science7': {
-                title: 'علوم پایه هفتم',
-                teacher: 'استاد محمدی', 
-                time: '۱۳:۰۰ - ۱۴:۳۰'
-            }
-        };
-
-        // وضعیت فعلی
-        let currentClass = null;
-        let currentUser = null;
-        let participants = [];
-
-        function joinClass() {
-            const className = document.getElementById('className').value;
-            const userName = document.getElementById('userName').value;
-            const userRole = document.getElementById('userRole').value;
-            
-            if (!className || !userName) {
-                alert('لطفاً تمام فیلدها را پر کنید');
-                return;
-            }
-            
-            currentClass = classes[className];
-            currentUser = { name: userName, role: userRole };
-            
-            // به‌روزرسانی صفحه
-            document.getElementById('classTitle').textContent = currentClass.title;
-            document.getElementById('classDetails').textContent = 
-                `استاد: ${currentClass.teacher} - زمان: ${currentClass.time}`;
-            document.getElementById('welcomeMessage').textContent = 
-                `سلام ${userName}! به کلاس ${currentClass.title} خوش آمدید`;
-            
-            // تغییر صفحه
-            document.getElementById('loginPage').classList.remove('active');
-            document.getElementById('classPage').classList.add('active');
-            
-            // اضافه کردن کاربر به لیست
-            addParticipant(currentUser);
-            addMessage(`👋 ${userName} به کلاس پیوست`, 'system');
-            
-            // شبیه‌سازی ورود دیگران
-            setTimeout(() => {
-                const fakeUsers = [
-                    { name: 'علی محمدی', role: 'student' },
-                    { name: 'زهرا کریمی', role: 'student' }
-                ];
-                fakeUsers.forEach(user => {
-                    addParticipant(user);
-                });
-                addMessage('📢 چند دانش‌آموز دیگر به کلاس پیوستند', 'system');
-            }, 2000);
-        }
-
-        function addParticipant(user) {
-            participants.push(user);
-            updateParticipantsList();
-        }
-
-        function updateParticipantsList() {
-            const list = document.getElementById('participantsList');
-            list.innerHTML = '';
-            
-            participants.forEach(user => {
-                const div = document.createElement('div');
-                div.style.padding = '0.5rem';
-                div.style.borderBottom = '1px solid #eee';
-                div.style.display = 'flex';
-                div.style.alignItems = 'center';
-                div.style.gap = '0.5rem';
-                
-                div.innerHTML = `
-                    <span>${user.role === 'teacher' ? '👨‍🏫' : '👦'}</span>
-                    <span>${user.name}</span>
-                    ${user.role === 'teacher' ? '<small style="color: #666;">(استاد)</small>' : ''}
-                `;
-                
-                list.appendChild(div);
-            });
-        }
-
-        function addMessage(text, type = 'user') {
-            const chatMessages = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message';
-            
-            if (type === 'system') {
-                messageDiv.style.background = '#e3f2fd';
-                messageDiv.style.textAlign = 'center';
-                messageDiv.style.color = '#1976d2';
-            } else {
-                messageDiv.style.background = '#dcf8c6';
-            }
-            
-            messageDiv.textContent = text;
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('messageInput');
-            const message = input.value.trim();
-            
-            if (message) {
-                addMessage(`${currentUser.name}: ${message}`);
-                input.value = '';
-                
-                // شبیه‌سازی پاسخ
-                setTimeout(() => {
-                    const responses = [
-                        'سلام! چطوری؟',
-                        'سوال خوبی پرسیدید',
-                        'من هم همین نظر رو دارم'
-                    ];
-                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-                    const randomUser = participants.find(p => p.name !== currentUser.name);
-                    if (randomUser) {
-                        addMessage(`${randomUser.name}: ${randomResponse}`);
-                    }
-                }, 1000);
-            }
-        }
-
-        function toggleMic() {
-            addMessage('🎤 میکروفون تغییر وضعیت داد', 'system');
-        }
-
-        function toggleCamera() {
-            addMessage('📹 دوربین تغییر وضعیت داد', 'system');
-        }
-
-        function raiseHand() {
-            addMessage(`✋ ${currentUser.name} دست خود را بلند کرد`, 'system');
-        }
-
-        function shareScreen() {
-            addMessage('📺 اشتراک‌گذاری صفحه فعال شد', 'system');
-        }
-
-        function leaveClass() {
-            if (confirm('آیا از کلاس خارج می‌شوید؟')) {
-                // بازگشت به صفحه ورود
-                document.getElementById('classPage').classList.remove('active');
-                document.getElementById('loginPage').classList.add('active');
-                
-                // ریست فرم
-                document.getElementById('className').value = '';
-                document.getElementById('userName').value = '';
-                document.getElementById('userRole').value = 'student';
-                
-                // پاک کردن داده‌ها
-                currentClass = null;
-                currentUser = null;
-                participants = [];
-                document.getElementById('participantsList').innerHTML = '';
-                document.getElementById('chatMessages').innerHTML = 
-                    '<div class="message" style="background: #e3f2fd; text-align: center;">به کلاس آنلاین خوش آمدید!</div>';
-            }
-        }
-
-        // فعال کردن ارسال با Enter
-        document.addEventListener('DOMContentLoaded', function() {
-            const messageInput = document.getElementById('messageInput');
-            if (messageInput) {
-                messageInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        sendMessage();
-                    }
-                });
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Vazirmatn', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    overflow-x: hidden;
+}
+
+.page {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.page.active {
+    display: block;
+}
+
+.music-btn, .help-btn {
+    position: fixed;
+    top: 20px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    font-size: 1.2em;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.music-btn {
+    left: 20px;
+}
+
+.help-btn {
+    right: 20px;
+}
+
+.music-btn:hover, .help-btn:hover {
+    transform: scale(1.1);
+    background: white;
+}
+
+.main-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInDown 1s ease;
+}
+
+.main-title {
+    font-size: 3em;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+}
+
+.sub-title {
+    font-size: 2em;
+    color: #f8f9fa;
+    opacity: 0.9;
+}
+
+.designer-info {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px 15px;
+    border-radius: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 1s ease;
+}
+
+.designer-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 10px;
+    border: 2px solid #667eea;
+}
+
+.designer-name {
+    font-size: 0.8em;
+    color: #333;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.lessons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.lesson-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+}
+
+.lesson-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border-color: #667eea;
+}
+
+.lesson-card h3 {
+    font-size: 1.5em;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.lesson-card p {
+    color: #666;
+    font-size: 1.1em;
+}
+
+/* استایل‌های بخش‌های درس */
+.lesson-header {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-left: 20px;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #5a6fd8;
+    transform: translateX(-5px);
+}
+
+.lesson-sections {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.section-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.section-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    min-height: 400px;
+}
+
+/* دیکشنری شناور */
+.dictionary-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+    width: 90%;
+    max-width: 500px;
+    animation: popIn 0.3s ease;
+}
+
+.popup-content {
+    padding: 20px;
+    position: relative;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #666;
+}
+
+.word-info p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.example-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.audio-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.audio-btn:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+
+/* انیمیشن‌ها */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* واکنش‌گرایی */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2em;
+    }
+    
+    .sub-title {
+        font-size: 1.5em;
+    }
+    
+    .lessons-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .lesson-sections {
+        grid-template-columns: 1fr;
+    }
+    
+    .designer-info {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        margin-top: 30px;
+        justify-content: center;
+    }
+}
+// script.js
+document.addEventListener('DOMContentLoaded', function() {
+    // داده‌های درس‌ها
+    const lessonsData = {
+        1: {
+            title: "Lesson 1: Personality",
+            sections: {
+                conversation: {
+                    title: "Conversation",
+                    content: `Ehsan: Who is your best friend at school?
+Parham: Reza.
+Ehsan: What's he like?
+Parham: Oh, he is really great! He's clever and kind.
+Ehsan: Is he hard-working too?
+Parham: Yes! And he's always very helpful.
+Ehsan: How?
+Parham: He always helps me with my lessons.`,
+                    audio: "conversation1.mp3"
+                },
+                practice: {
+                    title: "Practice 1&2",
+                    content: `Practice 1 → Talking about personality (1)
+- Are you hard-working? Yes, I am.
+- Is he clever? Yes, he is.
+- Is Zahra talkative? No, she isn't.
+- Are they neat? Yes, they are.
+- Are they upset? No, they're not.
+
+Practice 2 → Talking about personality (2)
+- What's your friend like? He's very funny.
+- What's your mother like? She's very kind and patient.
+- What's he like? He is quiet.
+- What's she like? She is clever.
+- What are you like? I'm a bit serious.
+- What are they like? They are very kind.`,
+                    audio: "practice1.mp3"
+                },
+                // سایر بخش‌ها
+            },
+            workbook: [
+                {
+                    question: "Kate isn't/aren't funny.",
+                    type: "choice",
+                    options: ["isn't", "aren't"],
+                    answer: "isn't"
+                },
+                // سایر سوالات
+            ],
+            quiz: [
+                {
+                    question: "What does 'brave' mean?",
+                    type: "multiple",
+                    options: ["شجاع", "مهربان", "کمک کننده", "خجالتی"],
+                    answer: "شجاع"
+                },
+                // سایر سوالات آزمون
+            ]
+        },
+        // سایر دروس
+    };
+
+    // متغیرهای جهانی
+    let currentLesson = null;
+    let currentSection = null;
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let isMusicPlaying = false;
+
+    // راه‌اندازی اولیه
+    initializeApp();
+
+    function initializeApp() {
+        setupEventListeners();
+        loadMainPage();
+    }
+
+    function setupEventListeners() {
+        // دکمه موسیقی
+        musicToggle.addEventListener('click', toggleMusic);
+        
+        // دکمه راهنما
+        document.getElementById('helpBtn').addEventListener('click', showHelp);
+        
+        // دکمه بازگشت
+        document.getElementById('backToMain').addEventListener('click', loadMainPage);
+        
+        // کلیک روی کارت‌های درس
+        document.querySelectorAll('.lesson-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const lessonNum = this.getAttribute('data-lesson');
+                loadLessonPage(lessonNum);
+            });
+        });
+        
+        // دکمه‌های بخش‌های درس
+        document.querySelectorAll('.section-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const section = this.getAttribute('data-section');
+                loadSectionContent(section);
+            });
+        });
+        
+        // بستن پاپ‌آپ دیکشنری
+        document.querySelector('.close-popup').addEventListener('click', closeDictionary);
+    }
+
+    function toggleMusic() {
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            musicToggle.textContent = '🔇';
+        } else {
+            bgMusic.play().catch(e => console.log('اتوماتیک پخش موسیقی مجاز نیست'));
+            musicToggle.textContent = '🎵';
+        }
+        isMusicPlaying = !isMusicPlaying;
+    }
+
+    function showHelp() {
+        alert('راهنمای استفاده از کتاب:\n\n- برای پخش موسیقی زمینه روی دکمه 🎵 کلیک کنید\n- برای انتخاب درس روی کارت درس مورد نظر کلیک کنید\n- در هر درس می‌توانید به بخش‌های مختلف دسترسی پیدا کنید\n- روی کلمات کلیک کنید تا معنی و اطلاعات آنها نمایش داده شود');
+    }
+
+    function loadMainPage() {
+        document.getElementById('mainPage').classList.add('active');
+        document.getElementById('lessonPage').classList.remove('active');
+        currentLesson = null;
+    }
+
+    function loadLessonPage(lessonNum) {
+        currentLesson = lessonNum;
+        const lessonData = lessonsData[lessonNum];
+        
+        document.getElementById('lessonTitle').textContent = lessonData.title;
+        document.getElementById('mainPage').classList.remove('active');
+        document.getElementById('lessonPage').classList.add('active');
+        
+        // بارگذاری محتوای پیش‌فرض
+        loadSectionContent('conversation');
+    }
+
+    function loadSectionContent(section) {
+        currentSection = section;
+        const sectionData = lessonsData[currentLesson].sections[section];
+        const contentDiv = document.getElementById('sectionContent');
+        
+        contentDiv.innerHTML = `
+            <h2>${sectionData.title}</h2>
+            <div class="text-content" id="interactiveText">${formatTextWithClickableWords(sectionData.content)}</div>
+            ${sectionData.audio ? `<button class="audio-section-btn" onclick="playSectionAudio('${sectionData.audio}')">🔊 پخش فایل صوتی</button>` : ''}
+        `;
+        
+        // فعال کردن قابلیت کلیک روی کلمات
+        setupWordClickListeners();
+    }
+
+    function formatTextWithClickableWords(text) {
+        // این تابع متن را به کلمات قابل کلیک تبدیل می‌کند
+        return text.split(/(\s+)/).map(word => {
+            if (word.trim().length > 0 && /[a-zA-Z]/.test(word)) {
+                return `<span class="clickable-word" data-word="${word.trim()}">${word}</span>`;
+            }
+            return word;
+        }).join('');
+    }
+
+    function setupWordClickListeners() {
+        document.querySelectorAll('.clickable-word').forEach(word => {
+            word.addEventListener('click', function() {
+                const wordText = this.getAttribute('data-word');
+                showWordInfo(wordText);
+            });
+        });
+    }
+
+    function showWordInfo(word) {
+        // داده‌های دیکشنری (در حالت واقعی از API یا دیتابیس استفاده می‌شود)
+        const wordData = getWordData(word);
+        
+        document.getElementById('wordTitle').textContent = word;
+        document.getElementById('wordPronunciation').textContent = wordData.pronunciation;
+        document.getElementById('wordMeaning').textContent = wordData.meaning;
+        document.getElementById('wordSynonyms').textContent = wordData.synonyms;
+        document.getElementById('relatedWords').textContent = wordData.relatedWords;
+        document.getElementById('wordExample').textContent = wordData.example;
+        document.getElementById('exampleTranslation').textContent = wordData.exampleTranslation;
+        
+        document.getElementById('dictionaryPopup').style.display = 'block';
+        
+        // تنظیم رویداد پخش مثال
+        document.getElementById('playExample').onclick = function() {
+            playTextAsAudio(wordData.example);
+        };
+    }
+
+    function getWordData(word) {
+        // این تابع در حالت واقعی از API یا دیتابیس استفاده می‌کند
+        const wordDictionary = {
+            "friend": {
+                pronunciation: "/frend/",
+                meaning: "دوست",
+                synonyms: "companion, pal",
+                relatedWords: "friendship, friendly",
+                example: "My best friend is very kind.",
+                exampleTranslation: "بهترین دوست من بسیار مهربان است."
+            },
+            "clever": {
+                pronunciation: "/ˈklev.ər/",
+                meaning: "باهوش، زرنگ",
+                synonyms: "smart, intelligent",
+                relatedWords: "cleverness, cleverly",
+                example: "She is a clever student.",
+                exampleTranslation: "او یک دانش‌آموز باهوش است."
+            },
+            // سایر کلمات
+        };
+        
+        return wordDictionary[word.toLowerCase()] || {
+            pronunciation: "اطلاعاتی موجود نیست",
+            meaning: "معنی یافت نشد",
+            synonyms: "---",
+            relatedWords: "---",
+            example: "مثال موجود نیست",
+            exampleTranslation: "---"
+        };
+    }
+
+    function closeDictionary() {
+        document.getElementById('dictionaryPopup').style.display = 'none';
+    }
+
+    function playSectionAudio(audioFile) {
+        // پخش فایل صوتی بخش
+        const audio = new Audio(audioFile);
+        audio.play();
+    }
+
+    function playTextAsAudio(text) {
+        // در حالت واقعی از Web Speech API استفاده می‌شود
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert('مرورگر شما از قابلیت تبدیل متن به گفتار پشتیبانی نمی‌کند');
+        }
+    }
+
+    // توابع مربوط به کتاب کار و آزمون‌ها
+    function loadWorkbook() {
+        // بارگذاری تمرینات کتاب کار
+    }
+
+    function loadQuiz() {
+        // بارگذاری آزمون
+    }
+
+    function submitQuiz() {
+        // ارسال پاسخ‌های آزمون
+    }
+
+    // صادر کردن توابع برای استفاده در HTML
+    window.playSectionAudio = playSectionAudio;
+    window.playTextAsAudio = playTextAsAudio;
+});
