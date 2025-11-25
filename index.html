@@ -3,268 +3,851 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کلاس آنلاین تعاملی</title>
-    <style>
-        /* استایل‌های صحیح و کامل */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            height: 100vh;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background: white;
-            margin: 0 auto;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            background: #2c3e50;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            padding: 1rem;
-            gap: 1rem;
-        }
-
-        .video-grid {
-            flex: 3;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .video-item {
-            background: #000;
-            border-radius: 10px;
-            position: relative;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-        }
-
-        .student-name {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-        }
-
-        .sidebar {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .chat-container {
-            flex: 1;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-
-        .chat-input {
-            display: flex;
-            padding: 1rem;
-            border-top: 1px solid #ddd;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            background: #3498db;
-            color: white;
-            cursor: pointer;
-        }
-    </style>
+    <title>سیستم کلاس آنلاین تعاملی</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>کلاس آنلاین - ریاضی پایه هفتم</h1>
-            <div class="user-info">
-                <span>استاد: احمدی</span>
-                <span>تعداد دانش‌آموزان: <span id="studentCount">0</span></span>
-            </div>
-        </header>
-
-        <div class="main-content">
-            <div class="video-grid" id="videoGrid">
-                <!-- ویدیوهای دانش‌آموزان在这里显示 -->
-            </div>
-            
-            <div class="sidebar">
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message system">به کلاس آنلاین خوش آمدید!</div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" id="messageInput" placeholder="پیام خود را بنویسید...">
-                        <button class="btn" onclick="sendMessage()">ارسال</button>
-                    </div>
+    <!-- صفحه ورود -->
+    <div id="loginPage" class="page">
+        <div class="login-container">
+            <div class="login-form">
+                <h2>ورود به کلاس آنلاین</h2>
+                <div class="form-group">
+                    <label for="className">نام کلاس:</label>
+                    <select id="className">
+                        <option value="">انتخاب کنید</option>
+                        <option value="math7">ریاضی پایه هفتم - استاد احمدی</option>
+                        <option value="science7">علوم پایه هفتم - استاد محمدی</option>
+                        <option value="persian7">ادبیات فارسی - استاد کریمی</option>
+                    </select>
                 </div>
+                <div class="form-group">
+                    <label for="userName">نام شما:</label>
+                    <input type="text" id="userName" placeholder="نام و نام خانوادگی">
+                </div>
+                <div class="form-group">
+                    <label for="userRole">نقش:</label>
+                    <select id="userRole">
+                        <option value="student">دانش‌آموز</option>
+                        <option value="teacher">استاد</option>
+                    </select>
+                </div>
+                <button class="btn-primary" onclick="joinClass()">ورود به کلاس</button>
                 
-                <div class="participants-list">
-                    <h3>شرکت‌کنندگان</h3>
-                    <div id="participantsList"></div>
+                <div class="class-link">
+                    <h4>لینک دعوت به کلاس:</h4>
+                    <div class="link-box">
+                        <span id="inviteLink">https://myclass.com/join/math7</span>
+                        <button class="btn-copy" onclick="copyLink()">کپی</button>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="controls">
-            <button class="btn" onclick="toggleMic()">🔊 میکروفون</button>
-            <button class="btn" onclick="toggleCamera()">📹 دوربین</button>
-            <button class="btn" onclick="raiseHand()">✋ دست بلند کن</button>
-            <button class="btn" onclick="shareScreen()">📺 اشتراک صفحه</button>
-            <button class="btn" onclick="openWhiteboard()">📝 تخته سفید</button>
         </div>
     </div>
 
-    <script>
-        // پیاده‌سازی پایه‌ای از WebRTC
-        class OnlineClass {
-            constructor() {
-                this.localStream = null;
-                this.connections = [];
-                this.peers = {};
-            }
+    <!-- صفحه اصلی کلاس -->
+    <div id="classPage" class="page hidden">
+        <div class="container">
+            <header class="header">
+                <div class="class-info">
+                    <h1 id="classTitle">کلاس آنلاین</h1>
+                    <div class="class-details">
+                        <span id="teacherName">استاد: </span>
+                        <span id="classTime">زمان: ۱۰:۰۰ - ۱۱:۳۰</span>
+                        <span id="studentCount">تعداد دانش‌آموزان: ۰</span>
+                    </div>
+                </div>
+                <div class="header-controls">
+                    <button class="btn-secondary" onclick="generateInviteLink()">📋 ایجاد لینک دعوت</button>
+                    <button class="btn-secondary" onclick="leaveClass()">خروج از کلاس</button>
+                </div>
+            </header>
 
-            async initialize() {
-                try {
-                    // دریافت دسترسی به دوربین و میکروفون
-                    this.localStream = await navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        audio: true
-                    });
-                    
-                    this.setupEventListeners();
-                    this.displayLocalVideo();
-                    
-                } catch (error) {
-                    console.error('خطا در دریافت مجوزها:', error);
-                }
-            }
+            <div class="main-content">
+                <!-- بخش ویدیوها -->
+                <div class="video-section">
+                    <div class="video-grid" id="videoGrid">
+                        <!-- ویدیوها به صورت پویا اضافه می‌شوند -->
+                    </div>
+                </div>
 
-            displayLocalVideo() {
-                const videoGrid = document.getElementById('videoGrid');
-                const videoElement = document.createElement('video');
-                videoElement.srcObject = this.localStream;
-                videoElement.autoplay = true;
-                videoElement.muted = true;
-                
-                const videoContainer = document.createElement('div');
-                videoContainer.className = 'video-item';
-                videoContainer.appendChild(videoElement);
-                
-                const nameLabel = document.createElement('div');
-                nameLabel.className = 'student-name';
-                nameLabel.textContent = 'شما';
-                videoContainer.appendChild(nameLabel);
-                
-                videoGrid.appendChild(videoContainer);
-            }
+                <!-- سایدبار -->
+                <div class="sidebar">
+                    <!-- چت -->
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <h3>چت کلاس</h3>
+                            <button class="btn-sm" onclick="clearChat()">پاک کردن</button>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message system">
+                                <span>به کلاس آنلاین خوش آمدید!</span>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." 
+                                   onkeypress="handleMessageKeypress(event)">
+                            <button class="btn-primary" onclick="sendMessage()">ارسال</button>
+                        </div>
+                    </div>
 
-            setupEventListeners() {
-                // مدیریت ارسال پیام
-                document.getElementById('messageInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.sendMessage();
-                });
-            }
+                    <!-- لیست شرکت‌کنندگان -->
+                    <div class="participants-container">
+                        <h3>شرکت‌کنندگان (<span id="participantsCount">0</span>)</h3>
+                        <div class="participants-list" id="participantsList">
+                            <!-- لیست به صورت پویا پر می‌شود -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            sendMessage() {
-                const input = document.getElementById('messageInput');
-                const message = input.value.trim();
-                
-                if (message) {
-                    this.displayMessage(message, 'own');
-                    input.value = '';
-                    
-                    // در محیط واقعی، پیام از طریق WebSocket ارسال می‌شود
-                }
-            }
+            <!-- کنترل‌های پایین -->
+            <div class="controls">
+                <button id="micBtn" class="btn-control" onclick="toggleMicrophone()">
+                    🎤 میکروفون
+                </button>
+                <button id="cameraBtn" class="btn-control" onclick="toggleCamera()">
+                    📹 دوربین
+                </button>
+                <button id="screenShareBtn" class="btn-control" onclick="toggleScreenShare()">
+                    📺 اشتراک صفحه
+                </button>
+                <button id="handRaiseBtn" class="btn-control" onclick="raiseHand()">
+                    ✋ دست بلند کن
+                </button>
+                <button class="btn-control" onclick="openWhiteboard()">
+                    📝 تخته سفید
+                </button>
+                <button class="btn-control" onclick="openPolls()">
+                    📊 نظرسنجی
+                </button>
+            </div>
+        </div>
+    </div>
 
-            displayMessage(message, type) {
-                const chatMessages = document.getElementById('chatMessages');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${type}`;
-                messageDiv.textContent = message;
-                
-                chatMessages.appendChild(messageDiv);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-        }
+    <!-- مودال لینک دعوت -->
+    <div id="inviteModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>لینک دعوت به کلاس</h3>
+            <div class="link-container">
+                <input type="text" id="generatedLink" readonly>
+                <button class="btn-copy" onclick="copyGeneratedLink()">کپی لینک</button>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeInviteModal()">بستن</button>
+            </div>
+        </div>
+    </div>
 
-        // راه‌اندازی کلاس
-        const onlineClass = new OnlineClass();
-        onlineClass.initialize();
-
-        // توابع کنترل
-        function toggleMic() {
-            // کنترل میکروفون
-        }
-
-        function toggleCamera() {
-            // کنترل دوربین
-        }
-
-        function raiseHand() {
-            onlineClass.displayMessage('✋ دانش‌آموز دست خود را بلند کرد', 'system');
-        }
-
-        function shareScreen() {
-            // اشتراک‌گذاری صفحه
-        }
-
-        function openWhiteboard() {
-            // باز کردن تخته سفید
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    height: 100vh;
+}
+
+.page {
+    width: 100%;
+    height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* صفحه ورود */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.class-link {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.link-box {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.link-box span {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border: 1px solid #ddd;
+}
+
+.btn-copy {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* صفحه اصلی */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: white;
+}
+
+.header {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.class-info h1 {
+    margin-bottom: 0.5rem;
+}
+
+.class-details {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    padding: 1rem;
+    gap: 1rem;
+    overflow: hidden;
+}
+
+.video-section {
+    flex: 3;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    height: 100%;
+}
+
+.video-item {
+    background: #1a1a1a;
+    border-radius: 10px;
+    position: relative;
+    aspect-ratio: 16/9;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.user-name {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9rem;
+}
+
+.sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 300px;
+}
+
+.chat-container {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+}
+
+.chat-header {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.message {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    max-width: 80%;
+}
+
+.message.system {
+    background: #e3f2fd;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.message.own {
+    background: #dcf8c6;
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.message.other {
+    background: #f1f1f1;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.chat-input {
+    display: flex;
+    padding: 1rem;
+    gap: 0.5rem;
+    border-top: 1px solid #eee;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+}
+
+.participants-container {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.participants-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 1rem;
+}
+
+.participant-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.participant-item.teacher {
+    background: #e8f5e8;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-top: 1px solid #ddd;
+}
+
+.btn-control {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-control:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.btn-control.active {
+    background: #e74c3c;
+}
+
+/* مودال */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 500px;
+    max-width: 90%;
+}
+
+.link-container {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.link-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+}
+// وضعیت کلاس
+class ClassManager {
+    constructor() {
+        this.currentClass = null;
+        this.currentUser = null;
+        this.participants = [];
+        this.localStream = null;
+        this.isMicOn = true;
+        this.isCameraOn = true;
+        this.isHandRaised = false;
+    }
+
+    // اطلاعات کلاس‌ها
+    classes = {
+        'math7': {
+            title: 'ریاضی پایه هفتم',
+            teacher: 'استاد احمدی',
+            time: '۱۰:۰۰ - ۱۱:۳۰',
+            inviteLink: 'https://myclass.com/join/math7'
+        },
+        'science7': {
+            title: 'علوم پایه هفتم',
+            teacher: 'استاد محمدی',
+            time: '۱۳:۰۰ - ۱۴:۳۰',
+            inviteLink: 'https://myclass.com/join/science7'
+        },
+        'persian7': {
+            title: 'ادبیات فارسی',
+            teacher: 'استاد کریمی',
+            time: '۰۸:۰۰ - ۰۹:۳۰',
+            inviteLink: 'https://myclass.com/join/persian7'
+        }
+    };
+
+    // ورود به کلاس
+    joinClass(className, userName, userRole) {
+        this.currentClass = this.classes[className];
+        this.currentUser = {
+            name: userName,
+            role: userRole,
+            id: this.generateId()
+        };
+
+        // به روزرسانی رابط کاربری
+        this.updateClassUI();
+        this.addParticipant(this.currentUser);
+        
+        // نمایش صفحه کلاس
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('classPage').classList.remove('hidden');
+
+        // شروع ویدیو
+        this.startVideo();
+        
+        // پیام خوش‌آمدگویی
+        this.addSystemMessage(`${userName} به کلاس پیوست`);
+    }
+
+    // به روزرسانی اطلاعات کلاس در UI
+    updateClassUI() {
+        document.getElementById('classTitle').textContent = this.currentClass.title;
+        document.getElementById('teacherName').textContent = `استاد: ${this.currentClass.teacher}`;
+        document.getElementById('classTime').textContent = `زمان: ${this.currentClass.time}`;
+        document.getElementById('inviteLink').textContent = this.currentClass.inviteLink;
+    }
+
+    // شروع ویدیو
+    async startVideo() {
+        try {
+            this.localStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+            
+            this.addVideoElement(this.currentUser, this.localStream);
+            
+        } catch (error) {
+            console.error('خطا در دسترسی به دوربین:', error);
+            this.addSystemMessage('خطا در دسترسی به دوربین و میکروفون');
+        }
+    }
+
+    // اضافه کردن عنصر ویدیو
+    addVideoElement(user, stream) {
+        const videoGrid = document.getElementById('videoGrid');
+        
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        videoItem.id = `video-${user.id}`;
+
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.autoplay = true;
+        video.muted = user.id === this.currentUser.id;
+
+        const userName = document.createElement('div');
+        userName.className = 'user-name';
+        userName.textContent = `${user.name} ${user.role === 'teacher' ? '👨‍🏫' : '👦'}`;
+
+        videoItem.appendChild(video);
+        videoItem.appendChild(userName);
+        videoGrid.appendChild(videoItem);
+    }
+
+    // اضافه کردن شرکت‌کننده
+    addParticipant(user) {
+        this.participants.push(user);
+        this.updateParticipantsList();
+    }
+
+    // به روزرسانی لیست شرکت‌کنندگان
+    updateParticipantsList() {
+        const list = document.getElementById('participantsList');
+        const count = document.getElementById('participantsCount');
+        const studentCount = document.getElementById('studentCount');
+        
+        list.innerHTML = '';
+        
+        this.participants.forEach(participant => {
+            const item = document.createElement('div');
+            item.className = `participant-item ${participant.role === 'teacher' ? 'teacher' : ''}`;
+            item.innerHTML = `
+                <span>${participant.role === 'teacher' ? '👨‍🏫' : '👦'}</span>
+                <span>${participant.name}</span>
+                ${participant.role === 'teacher' ? '<span class="role-badge">استاد</span>' : ''}
+            `;
+            list.appendChild(item);
+        });
+        
+        const students = this.participants.filter(p => p.role === 'student').length;
+        count.textContent = this.participants.length;
+        studentCount.textContent = `تعداد دانش‌آموزان: ${students}`;
+    }
+
+    // اضافه کردن پیام سیستم
+    addSystemMessage(message) {
+        this.addMessage(message, 'system');
+    }
+
+    // اضافه کردن پیام
+    addMessage(text, type = 'other', sender = 'سیستم') {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        
+        if (type === 'system') {
+            messageDiv.innerHTML = `<span>${text}</span>`;
+        } else {
+            messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // تولید ID
+    generateId() {
+        return Math.random().toString(36).substr(2, 9);
+    }
+}
+
+// ایجاد نمونه از مدیریت کلاس
+const classManager = new ClassManager();
+
+// توابع عمومی
+function joinClass() {
+    const className = document.getElementById('className').value;
+    const userName = document.getElementById('userName').value;
+    const userRole = document.getElementById('userRole').value;
+
+    if (!className || !userName) {
+        alert('لطفاً تمام فیلدها را پر کنید');
+        return;
+    }
+
+    classManager.joinClass(className, userName, userRole);
+}
+
+function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+
+    if (message) {
+        classManager.addMessage(message, 'own', classManager.currentUser.name);
+        input.value = '';
+        
+        // شبیه‌سازی پاسخ سایرین
+        setTimeout(() => {
+            const responses = [
+                'عالی بود!',
+                'سوال خوبی پرسیدید',
+                'من هم همین نظر را دارم',
+                'لطفاً بیشتر توضیح دهید'
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            const randomUser = classManager.participants[
+                Math.floor(Math.random() * classManager.participants.length)
+            ];
+            if (randomUser && randomUser.id !== classManager.currentUser.id) {
+                classManager.addMessage(randomResponse, 'other', randomUser.name);
+            }
+        }, 1000);
+    }
+}
+
+function handleMessageKeypress(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+}
+
+function toggleMicrophone() {
+    const btn = document.getElementById('micBtn');
+    classManager.isMicOn = !classManager.isMicOn;
+    
+    if (classManager.localStream) {
+        classManager.localStream.getAudioTracks().forEach(track => {
+            track.enabled = classManager.isMicOn;
+        });
+    }
+    
+    btn.textContent = classManager.isMicOn ? '🎤 میکروفون' : '🔇 میکروفون';
+    btn.classList.toggle('active', !classManager.isMicOn);
+    
+    classManager.addSystemMessage(`میکروفون ${classManager.isMicOn ? 'روشن' : 'خاموش'} شد`);
+}
+
+function toggleCamera() {
+    const btn = document.getElementById('cameraBtn');
+    classManager.isCameraOn = !classManager.isCameraOn;
+    
+    if (classManager.localStream) {
+        classManager.localStream.getVideoTracks().forEach(track => {
+            track.enabled = classManager.isCameraOn;
+        });
+    }
+    
+    btn.textContent = classManager.isCameraOn ? '📹 دوربین' : '📷 دوربین';
+    btn.classList.toggle('active', !classManager.isCameraOn);
+    
+    classManager.addSystemMessage(`دوربین ${classManager.isCameraOn ? 'روشن' : 'خاموش'} شد`);
+}
+
+function raiseHand() {
+    const btn = document.getElementById('handRaiseBtn');
+    classManager.isHandRaised = !classManager.isHandRaised;
+    
+    btn.classList.toggle('active', classManager.isHandRaised);
+    btn.textContent = classManager.isHandRaised ? '✋ دست پایین' : '✋ دست بلند کن';
+    
+    classManager.addSystemMessage(
+        classManager.isHandRaised ? 
+        `${classManager.currentUser.name} دست خود را بلند کرد` :
+        `${classManager.currentUser.name} دست خود را پایین آورد`
+    );
+}
+
+function generateInviteLink() {
+    document.getElementById('generatedLink').value = classManager.currentClass.inviteLink;
+    document.getElementById('inviteModal').classList.remove('hidden');
+}
+
+function closeInviteModal() {
+    document.getElementById('inviteModal').classList.add('hidden');
+}
+
+function copyGeneratedLink() {
+    const linkInput = document.getElementById('generatedLink');
+    linkInput.select();
+    document.execCommand('copy');
+    alert('لینک کپی شد!');
+}
+
+function copyLink() {
+    const link = document.getElementById('inviteLink');
+    const tempInput = document.createElement('input');
+    tempInput.value = link.textContent;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    alert('لینک کپی شد!');
+}
+
+function clearChat() {
+    document.getElementById('chatMessages').innerHTML = 
+        '<div class="message system"><span>چت پاک شد</span></div>';
+}
+
+function leaveClass() {
+    if (confirm('آیا از کلاس خارج می‌شوید؟')) {
+        if (classManager.localStream) {
+            classManager.localStream.getTracks().forEach(track => track.stop());
+        }
+        
+        document.getElementById('classPage').classList.add('hidden');
+        document.getElementById('loginPage').classList.remove('hidden');
+        
+        // ریست فرم
+        document.getElementById('className').value = '';
+        document.getElementById('userName').value = '';
+        document.getElementById('userRole').value = 'student';
+    }
+}
+
+// توابعی که بعداً پیاده‌سازی می‌شوند
+function toggleScreenShare() {
+    classManager.addSystemMessage('امکان اشتراک‌گذاری صفحه به زودی اضافه می‌شود');
+}
+
+function openWhiteboard() {
+    classManager.addSystemMessage('تخته سفید به زودی اضافه می‌شود');
+}
+
+function openPolls() {
+    classManager.addSystemMessage('نظرسنجی به زودی اضافه می‌شود');
+}
+
+// شبیه‌سازی ورود سایر کاربران
+setTimeout(() => {
+    if (classManager.currentClass) {
+        const fakeUsers = [
+            { name: 'علی محمدی', role: 'student' },
+            { name: 'زهرا کریمی', role: 'student' },
+            { name: 'مهدی رضایی', role: 'student' }
+        ];
+        
+        fakeUsers.forEach(user => {
+            classManager.addParticipant({
+                ...user,
+                id: classManager.generateId()
+            });
+        });
+        
+        classManager.addSystemMessage('چند دانش‌آموز به کلاس پیوستند');
+    }
+}, 3000);
