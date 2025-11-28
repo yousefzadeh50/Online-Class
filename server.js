@@ -10,37 +10,30 @@ const io = socketIo(server);
 // سرویس فایل‌های استاتیک
 app.use(express.static(path.join(__dirname, 'public')));
 
-// برای رفع مشکل CORS
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
+// برای روت اصلی
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // ذخیره‌سازی داده‌ها
-const classes = new Map();
+const rooms = new Map();
 const users = new Map();
 
 io.on('connection', (socket) => {
-    console.log('✅ کاربر جدید متصل شد:', socket.id);
+    console.log('User connected:', socket.id);
 
-    // پیوستن به کلاس
     socket.on('join-class', (data) => {
-        const { classId, userData } = data;
+        const { roomId, userData } = data;
         
-        console.log(`📚 کاربر ${userData.name} می‌خواهد به کلاس ${classId} بپیوندد`);
-
-        if (!classes.has(classId)) {
-            classes.set(classId, {
-                students: new Map(),
-                teacher: null,
+        if (!rooms.has(roomId)) {
+            rooms.set(roomId, {
+                users: new Map(),
                 messages: [],
                 attendance: []
             });
-            console.log(`🎯 کلاس جدید ایجاد شد: ${classId}`);
         }
 
-        const classRoom = classes.get(classId);
+        const room = rooms.get(roomId);
         const user = {
             id: socket.id,
             ...userData,
@@ -48,43 +41,36 @@ io.on('connection', (socket) => {
             socketId: socket.id
         };
 
-        users.set(socket.id, { classId, userData });
+        users.set(socket.id, { roomId, userData: user });
 
-        // ثبت بر اساس نقش
         if (userData.role === 'teacher') {
-            classRoom.teacher = user;
-            console.log(`👨‍🏫 استاد ${userData.name} به کلاس پیوست`);
+            room.teacher = user;
         } else {
-            classRoom.students.set(socket.id, user);
-            console.log(`👨‍🎓 دانش‌آموز ${userData.name} به کلاس پیوست`);
+            room.users.set(socket.id, user);
             
             // اطلاع به استاد
-            if (classRoom.teacher) {
-                socket.to(classRoom.teacher.socketId).emit('new-student-waiting', user);
+            if (room.teacher) {
+                io.to(room.teacher.socketId).emit('new-student-waiting', user);
             }
         }
 
         // ثبت حضور
-        classRoom.attendance.push({
+        room.attendance.push({
             userId: user.id,
             userName: user.name,
-            userRole: userData.role,
             action: 'join',
-            timestamp: new Date(),
-            timeString: new Date().toLocaleTimeString('fa-IR')
+            timestamp: new Date()
         });
 
-        socket.join(classId);
+        socket.join(roomId);
         
-        // ارسال تاریخچه پیام‌ها به کاربر جدید
-        socket.emit('message-history', classRoom.messages);
+        // ارسال تاریخچه پیام‌ها
+        socket.emit('message-history', room.messages);
         
-        // اطلاع به سایر کاربران
-        socket.to(classId).emit('user-joined', user);
-        socket.to(classId).emit('attendance-update', classRoom.attendance);
+        // اطلاع به سایرین
+        socket.to(roomId).emit('user-joined', user);
         
-        // به کاربر جدید هم لیست حضور رو بفرست
-        socket.emit('attendance-update', classRoom.attendance);
+        console.log(`User ${user.name} joined class ${roomId}`);
     });
 
     // ارسال پیام
@@ -92,20 +78,18 @@ io.on('connection', (socket) => {
         const user = users.get(socket.id);
         if (!user) return;
 
-        const classRoom = classes.get(user.classId);
-        if (!classRoom) return;
+        const room = rooms.get(user.roomId);
+        if (!room) return;
 
         const message = {
             id: Date.now(),
             user: user.userData,
             text: data.text,
-            timestamp: new Date(),
-            type: 'text'
+            timestamp: new Date()
         };
 
-        classRoom.messages.push(message);
-        io.to(user.classId).emit('new-message', message);
-        console.log(`💬 پیام جدید از ${user.userData.name}: ${data.text}`);
+        room.messages.push(message);
+        io.to(user.roomId).emit('new-message', message);
     });
 
     // تأیید دانش‌آموز
@@ -113,47 +97,37 @@ io.on('connection', (socket) => {
         const user = users.get(socket.id);
         if (!user || user.userData.role !== 'teacher') return;
 
-        const classRoom = classes.get(user.classId);
-        const student = classRoom.students.get(data.studentId);
+        const room = rooms.get(user.roomId);
+        const student = room.users.get(data.studentId);
         
         if (student) {
             student.approved = true;
             io.to(data.studentId).emit('student-approved');
-            io.to(user.classId).emit('user-approved', student);
-            console.log(`✅ دانش‌آموز ${student.name} تأیید شد`);
+            io.to(user.roomId).emit('user-approved', student);
         }
     });
 
-    // قطع ارتباط
     socket.on('disconnect', () => {
         const user = users.get(socket.id);
         if (user) {
-            const classRoom = classes.get(user.classId);
-            if (classRoom) {
+            const room = rooms.get(user.roomId);
+            if (room) {
                 // ثبت خروج
-                classRoom.attendance.push({
+                room.attendance.push({
                     userId: user.userData.id,
                     userName: user.userData.name,
-                    userRole: user.userData.role,
                     action: 'leave',
-                    timestamp: new Date(),
-                    timeString: new Date().toLocaleTimeString('fa-IR')
+                    timestamp: new Date()
                 });
 
-                // حذف کاربر
                 if (user.userData.role === 'teacher') {
-                    classRoom.teacher = null;
+                    room.teacher = null;
                 } else {
-                    classRoom.students.delete(socket.id);
+                    room.users.delete(socket.id);
                 }
 
                 users.delete(socket.id);
-                
-                // اطلاع به سایر کاربران
-                socket.to(user.classId).emit('user-left', user.userData);
-                socket.to(user.classId).emit('attendance-update', classRoom.attendance);
-                
-                console.log(`❌ کاربر ${user.userData.name} قطع شد`);
+                socket.to(user.roomId).emit('user-left', user.userData);
             }
         }
     });
@@ -161,6 +135,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`🚀 سرور کلاس آنلاین روی پورت ${PORT} راه‌اندازی شد`);
-    console.log(`📖 برای تست: http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
