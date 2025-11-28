@@ -64,6 +64,10 @@
             color: #2575fc;
         }
         
+        .teacher-password {
+            display: none;
+        }
+        
         .form-group {
             margin-bottom: 1rem;
         }
@@ -117,6 +121,10 @@
             margin: 0 auto 10px;
             border: 3px solid white;
             overflow: hidden;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .designer-photo img {
@@ -130,7 +138,8 @@
             font-weight: 300;
             letter-spacing: 1px;
         }
-                /* استایل‌های اصلی */
+        
+        /* استایل‌های اصلی */
         header {
             background-color: var(--primary-color);
             color: white;
@@ -185,6 +194,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 0.5rem;
+            max-height: 200px;
         }
         
         .attendance-item {
@@ -255,6 +265,35 @@
             cursor: pointer;
             font-size: 0.8rem;
             margin-right: 0.25rem;
+        }
+        
+        .students-list {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .audio-control-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .audio-control-btn.muted {
+            background-color: var(--error);
         }
         
         .chat-area {
@@ -335,7 +374,8 @@
             text-align: left;
             margin-top: 0.25rem;
         }
-                .input-area {
+        
+        .input-area {
             display: flex;
             padding: 1rem;
             background-color: white;
@@ -416,6 +456,56 @@
             background-color: #da190b;
         }
         
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-left: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .teacher-avatar {
+            background-color: var(--teacher-color);
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .user-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: auto;
+        }
+        
+        .online {
+            background-color: var(--success);
+        }
+        
+        .speaking {
+            background-color: var(--warning);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
         .invite-section {
             padding: 1rem;
             background-color: white;
@@ -481,6 +571,10 @@
             border-radius: 50%;
             margin-left: 5px;
             overflow: hidden;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .global-designer-photo img {
@@ -530,6 +624,10 @@
                         <option value="teacher">استاد</option>
                     </select>
                 </div>
+                <div class="form-group teacher-password" id="teacherPasswordGroup">
+                    <label for="teacherPassword">رمز ورود استاد</label>
+                    <input type="password" id="teacherPassword" placeholder="3325547">
+                </div>
                 <div class="form-group">
                     <label for="studentId">شماره دانش‌آموزی (اختیاری)</label>
                     <input type="text" id="studentId">
@@ -540,22 +638,26 @@
         
         <div class="designer-section">
             <div class="designer-photo">
-                <img src="https://s34.picofile.com/file/8488183492/2.png" alt="Designer">
+                <div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#666;">
+                    تصویر
+                </div>
             </div>
             <div class="designer-name">Designer A.R. Yousefzadeh</div>
         </div>
     </div>
-
+    
     <div class="global-designer">
         <div class="global-designer-photo">
-            <img src="https://s34.picofile.com/file/8488183492/2.png" alt="Designer">
+            <div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#666;font-size:10px;">
+                عکس
+            </div>
         </div>
         <div class="global-designer-name">A.R. Yousefzadeh</div>
     </div>
     
-    <div class="notification" id="notification"></div>
+    <div class="notification" id="notification">لینک کپی شد!</div>
     
-    <header class="hidden" id="mainHeader">
+    <header>
         <h1>کلاس آنلاین</h1>
         <div class="user-info">
             <div class="user-badge" id="userBadge">نام کاربر</div>
@@ -563,7 +665,7 @@
         </div>
     </header>
     
-    <div class="container hidden" id="mainContainer">
+    <div class="container">
         <div class="chat-area">
             <div class="messages" id="messages">
                 <div class="message system">
@@ -638,6 +740,13 @@
                 </div>
             </div>
             
+            <div class="students-list hidden" id="studentsListSection">
+                <h4>دانش‌آموزان حاضر</h4>
+                <div id="studentsList">
+                    <!-- لیست دانش‌آموزان -->
+                </div>
+            </div>
+            
             <div class="teacher-controls hidden" id="teacherControls">
                 <button class="teacher-btn" id="viewAttendance">مشاهده گزارش حضور و غیاب</button>
                 <button class="teacher-btn" id="downloadAttendance">دانلود گزارش</button>
@@ -645,16 +754,15 @@
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script>
         // مدیریت کلاس آنلاین
         class OnlineClass {
             constructor() {
-                this.socket = io();
                 this.currentUser = null;
                 this.attendance = [];
                 this.users = new Map();
                 this.pendingUsers = [];
+                this.approvedStudents = [];
                 this.isTeacher = false;
                 this.localStream = null;
                 this.isJoined = false;
@@ -662,14 +770,28 @@
                 this.autoApprove = false;
                 this.roomId = this.getRoomIdFromURL();
                 this.studentColors = {};
+                this.audioContext = null;
+                this.audioElements = new Map();
                 
                 this.init();
             }
-                        init() {
+            
+            init() {
                 this.setupEventListeners();
                 this.generateInviteLink();
                 this.updateTime();
                 
+                // نمایش/مخفی کردن فیلد رمز استاد
+                document.getElementById('userRole').addEventListener('change', (e) => {
+                    const passwordGroup = document.getElementById('teacherPasswordGroup');
+                    if (e.target.value === 'teacher') {
+                        passwordGroup.style.display = 'block';
+                    } else {
+                        passwordGroup.style.display = 'none';
+                    }
+                });
+                
+                // به روز رسانی زمان هر ثانیه
                 setInterval(() => this.updateTime(), 1000);
             }
             
@@ -679,71 +801,39 @@
             }
             
             setupEventListeners() {
+                // فرم ثبت اطلاعات کاربر
                 document.getElementById('userForm').addEventListener('submit', (e) => {
                     e.preventDefault();
                     this.registerUser();
                 });
                 
+                // مدیریت پیام‌ها
                 document.getElementById('sendButton').addEventListener('click', () => this.sendMessage());
                 document.getElementById('messageInput').addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') this.sendMessage();
                 });
                 
+                // مدیریت صدا
                 document.getElementById('joinAudio').addEventListener('click', () => this.joinAudio());
                 document.getElementById('muteButton').addEventListener('click', () => this.toggleMute());
                 document.getElementById('leaveAudio').addEventListener('click', () => this.leaveAudio());
                 
+                // مدیریت لینک دعوت
                 document.getElementById('copyLink').addEventListener('click', () => this.copyInviteLink());
                 
+                // کنترل‌های استاد
                 document.getElementById('viewAttendance').addEventListener('click', () => this.viewAttendanceReport());
                 document.getElementById('downloadAttendance').addEventListener('click', () => this.downloadAttendanceReport());
                 
+                // چک باکس تایید خودکار
                 document.getElementById('autoApproveCheckbox').addEventListener('change', (e) => {
                     this.autoApprove = e.target.checked;
-                });
-                
-                this.setupSocketListeners();
-            }
-            
-            setupSocketListeners() {
-                this.socket.on('message-history', (messages) => {
-                    messages.forEach(message => {
-                        this.displayMessage(message);
-                    });
-                });
-
-                this.socket.on('new-message', (message) => {
-                    this.displayMessage(message);
-                });
-
-                this.socket.on('user-joined', (user) => {
-                    this.addSystemMessage(`${user.name} به کلاس پیوست.`);
-                    this.updateAttendance();
-                });
-
-                this.socket.on('user-left', (user) => {
-                    this.addSystemMessage(`${user.name} کلاس را ترک کرد.`);
-                    this.updateAttendance();
-                });
-
-                this.socket.on('new-student-waiting', (student) => {
-                    if (this.isTeacher) {
-                        this.addPendingStudent(student);
+                    if (this.autoApprove) {
+                        // تایید همه کاربران در انتظار
+                        this.pendingUsers.forEach(user => this.approveUser(user));
+                        this.pendingUsers = [];
+                        this.updatePendingUsersList();
                     }
-                });
-
-                this.socket.on('student-approved', () => {
-                    this.currentUser.approved = true;
-                    this.showNotification('تأیید شدید! اکنون می‌توانید در کلاس مشارکت کنید.');
-                    this.enableChatFeatures();
-                });
-
-                this.socket.on('user-approved', (student) => {
-                    this.addSystemMessage(`${student.name} تأیید شد.`);
-                });
-
-                this.socket.on('attendance-update', (attendance) => {
-                    this.updateAttendanceList(attendance);
                 });
             }
             
@@ -751,6 +841,15 @@
                 const userName = document.getElementById('userName').value;
                 const userRole = document.getElementById('userRole').value;
                 const studentId = document.getElementById('studentId').value;
+                const teacherPassword = document.getElementById('teacherPassword').value;
+
+                // بررسی رمز استاد
+                if (userRole === 'teacher') {
+                    if (teacherPassword !== '3325547') {
+                        alert('رمز ورود استاد اشتباه است!');
+                        return;
+                    }
+                }
 
                 this.currentUser = {
                     id: this.generateUserId(),
@@ -758,33 +857,259 @@
                     role: userRole,
                     studentId: studentId,
                     joinTime: new Date(),
-                    approved: userRole === 'teacher'
+                    approved: userRole === 'teacher' // استادان به طور خودکار تایید می‌شوند
                 };
 
                 this.isTeacher = userRole === 'teacher';
 
-                this.socket.emit('join-class', {
-                    roomId: this.roomId,
-                    userData: this.currentUser
-                });
+                if (this.isTeacher) {
+                    // اگر کاربر استاد است، مستقیماً وارد شود
+                    this.approveUser(this.currentUser);
+                } else {
+                    // اگر کاربر دانش‌آموز است، در لیست انتظار قرار گیرد
+                    this.addPendingUser(this.currentUser);
+                    document.getElementById('userModal').style.display = 'none';
+                    this.showNotification('در انتظار تایید استاد...');
+                    return;
+                }
 
+                // مخفی کردن مدال
                 document.getElementById('userModal').style.display = 'none';
-                document.getElementById('mainHeader').classList.remove('hidden');
-                document.getElementById('mainContainer').classList.remove('hidden');
-                
+
+                // به روز رسانی اطلاعات کاربر
                 this.updateUserInfo();
-                
+
+                // نمایش کنترل‌های استاد اگر کاربر استاد باشد
                 if (this.isTeacher) {
                     document.getElementById('teacherControls').classList.remove('hidden');
                     document.getElementById('inviteSection').classList.remove('hidden');
                     document.getElementById('userBadge').classList.add('teacher-badge');
+                    document.getElementById('userBadge').textContent = `استاد: ${userName}`;
+                    
+                    // شبیه‌سازی حضور دانش‌آموزان برای تست
+                    setTimeout(() => {
+                        this.simulateStudentJoining();
+                    }, 2000);
+                } else {
+                    document.getElementById('userBadge').textContent = `دانش‌آموز: ${userName}`;
+                }
+
+                // پیام خوش‌آمدگویی
+                this.addSystemMessage(`${userName} به کلاس پیوست.`);
+            }
+            
+            simulateStudentJoining() {
+                // شبیه‌سازی ورود دانش‌آموزان برای تست
+                const testStudents = [
+                    { name: 'علی محمدی', id: 'stu-1' },
+                    { name: 'فاطمه کریمی', id: 'stu-2' },
+                    { name: 'محمد رضایی', id: 'stu-3' }
+                ];
+                
+                testStudents.forEach((student, index) => {
+                    setTimeout(() => {
+                        const testUser = {
+                            id: student.id,
+                            name: student.name,
+                            role: 'student',
+                            joinTime: new Date()
+                        };
+                        this.addPendingUser(testUser);
+                        this.addSystemMessage(`${student.name} در انتظار تایید است.`);
+                    }, index * 1500);
+                });
+            }
+            
+            addPendingUser(user) {
+                this.pendingUsers.push(user);
+                this.updatePendingUsersList();
+                
+                // اطلاع به استاد
+                if (this.isTeacher) {
+                    this.addSystemMessage(`دانش‌آموز ${user.name} در انتظار تایید است.`);
+                }
+            }
+            
+            updatePendingUsersList() {
+                const pendingUsersList = document.getElementById('pendingUsersList');
+                const pendingUsersSection = document.getElementById('pendingUsersSection');
+                
+                if (this.pendingUsers.length > 0 && this.isTeacher) {
+                    pendingUsersSection.classList.remove('hidden');
+                } else {
+                    pendingUsersSection.classList.add('hidden');
                 }
                 
-                this.addSystemMessage(`${userName} به کلاس پیوست.`);
+                pendingUsersList.innerHTML = '';
+                
+                this.pendingUsers.forEach(user => {
+                    const pendingUserElement = document.createElement('div');
+                    pendingUserElement.className = 'pending-user';
+                    pendingUserElement.innerHTML = `
+                        <div>${user.name}</div>
+                        <div>
+                            <button class="reject-btn" data-userid="${user.id}">رد</button>
+                            <button class="approve-btn" data-userid="${user.id}">تایید</button>
+                        </div>
+                    `;
+                    
+                    pendingUsersList.appendChild(pendingUserElement);
+                });
+                
+                // اضافه کردن event listener برای دکمه‌های تایید و رد
+                document.querySelectorAll('.approve-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const userId = e.target.getAttribute('data-userid');
+                        this.approveUserById(userId);
+                    });
+                });
+                
+                document.querySelectorAll('.reject-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const userId = e.target.getAttribute('data-userid');
+                        this.rejectUserById(userId);
+                    });
+                });
+            }
+            
+            approveUserById(userId) {
+                const userIndex = this.pendingUsers.findIndex(user => user.id === userId);
+                if (userIndex !== -1) {
+                    const user = this.pendingUsers[userIndex];
+                    this.pendingUsers.splice(userIndex, 1);
+                    this.approveUser(user);
+                    this.updatePendingUsersList();
+                }
+            }
+            
+            rejectUserById(userId) {
+                const userIndex = this.pendingUsers.findIndex(user => user.id === userId);
+                if (userIndex !== -1) {
+                    const user = this.pendingUsers[userIndex];
+                    this.pendingUsers.splice(userIndex, 1);
+                    this.addSystemMessage(`درخواست ${user.name} رد شد.`);
+                    this.updatePendingUsersList();
+                }
+            }
+            
+            approveUser(user) {
+                user.approved = true;
+                this.recordAttendance(user, 'join');
+                
+                if (user.role === 'student') {
+                    this.approvedStudents.push(user);
+                    this.updateStudentsList();
+                    this.assignColorToStudent(user.id);
+                }
+                
+                this.addSystemMessage(`${user.name} به کلاس پیوست.`);
+            }
+            
+            updateStudentsList() {
+                const studentsList = document.getElementById('studentsList');
+                const studentsListSection = document.getElementById('studentsListSection');
+                
+                if (this.approvedStudents.length > 0 && this.isTeacher) {
+                    studentsListSection.classList.remove('hidden');
+                } else {
+                    studentsListSection.classList.add('hidden');
+                }
+                
+                studentsList.innerHTML = '';
+                
+                this.approvedStudents.forEach(student => {
+                    const studentElement = document.createElement('div');
+                    studentElement.className = 'student-item';
+                    studentElement.innerHTML = `
+                        <div>${student.name}</div>
+                        <button class="audio-control-btn" data-userid="${student.id}">
+                            قطع صدا
+                        </button>
+                    `;
+                    
+                    studentsList.appendChild(studentElement);
+                });
+                
+                // مدیریت دکمه‌های کنترل صدا
+                document.querySelectorAll('.audio-control-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const userId = e.target.getAttribute('data-userid');
+                        this.toggleStudentAudio(userId, e.target);
+                    });
+                });
+            }
+            
+            toggleStudentAudio(userId, button) {
+                if (button.classList.contains('muted')) {
+                    button.classList.remove('muted');
+                    button.textContent = 'قطع صدا';
+                    // در نسخه واقعی، اینجا صدا فعال می‌شود
+                } else {
+                    button.classList.add('muted');
+                    button.textContent = 'فعال کردن صدا';
+                    // در نسخه واقعی، اینجا صدا قطع می‌شود
+                }
+            }
+            
+            assignColorToStudent(studentId) {
+                const colors = ['student-1', 'student-2', 'student-3', 'student-4', 'student-5'];
+                const usedColors = Object.values(this.studentColors);
+                const availableColors = colors.filter(color => !usedColors.includes(color));
+                
+                if (availableColors.length > 0) {
+                    this.studentColors[studentId] = availableColors[0];
+                } else {
+                    this.studentColors[studentId] = colors[Math.floor(Math.random() * colors.length)];
+                }
             }
             
             generateUserId() {
                 return 'user-' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            recordAttendance(user, action) {
+                const record = {
+                    userId: user.id,
+                    userName: user.name,
+                    userRole: user.role,
+                    studentId: user.studentId,
+                    action: action,
+                    timestamp: new Date(),
+                    timeString: this.getTimeString()
+                };
+                
+                this.attendance.push(record);
+                this.updateAttendanceList();
+            }
+            
+            updateAttendanceList() {
+                const attendanceList = document.getElementById('attendanceList');
+                const userCount = document.getElementById('userCount');
+                
+                // فقط کاربران تأیید شده
+                const approvedUsers = this.attendance.filter(record => {
+                    const user = this.approvedStudents.find(u => u.id === record.userId) || 
+                                (this.currentUser && this.currentUser.id === record.userId);
+                    return user && record.action === 'join';
+                });
+                
+                attendanceList.innerHTML = '';
+                
+                approvedUsers.forEach(record => {
+                    const item = document.createElement('div');
+                    item.className = 'attendance-item';
+                    
+                    item.innerHTML = `
+                        <div>
+                            <div class="attendance-name">${record.userName} ${record.userRole === 'teacher' ? '(استاد)' : ''}</div>
+                            <div class="attendance-time">ورود - ${record.timeString}</div>
+                        </div>
+                    `;
+                    
+                    attendanceList.appendChild(item);
+                });
+                
+                userCount.textContent = approvedUsers.length;
             }
             
             updateUserInfo() {
@@ -798,76 +1123,19 @@
                 document.getElementById('currentTime').textContent = timeString;
             }
             
+            getTimeString() {
+                const now = new Date();
+                return `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}:${now.getSeconds().toString().padStart(2, '0')}`;
+            }
+            
             generateInviteLink() {
                 const currentUrl = window.location.origin + window.location.pathname + '?room=' + this.roomId;
                 document.getElementById('inviteLink').value = currentUrl;
             }
             
-            sendMessage() {
-                if (!this.currentUser || !this.currentUser.approved) {
-                    this.showNotification('شما هنوز تأیید نشده‌اید.');
-                    return;
-                }
-
-                const messageInput = document.getElementById('messageInput');
-                const messageText = messageInput.value.trim();
-
-                if (messageText) {
-                    this.socket.emit('send-message', {
-                        text: messageText
-                    });
-
-                    messageInput.value = '';
-                }
-            }
-            
-            displayMessage(message) {
-                const messagesContainer = document.getElementById('messages');
-                const messageElement = document.createElement('div');
-                
-                const isCurrentUser = message.user.id === this.currentUser.id;
-                const isTeacher = message.user.role === 'teacher';
-                const studentColorClass = this.studentColors[message.user.id] || '';
-
-                messageElement.className = `message ${isCurrentUser ? 'sent' : 'received'} ${isTeacher ? 'teacher-message' : ''} ${studentColorClass}`;
-                
-                const time = new Date(message.timestamp);
-                const timeString = `${time.getHours()}:${time.getMinutes().toString().padStart(2, '0')}`;
-
-                messageElement.innerHTML = `
-                    <div class="message-sender">${message.user.name} ${isTeacher ? '(استاد)' : ''}</div>
-                    <div class="message-text">${message.text}</div>
-                    <div class="message-time">${timeString}</div>
-                `;
-
-                messagesContainer.appendChild(messageElement);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-            
-            addSystemMessage(text, type = 'info') {
-                const messagesContainer = document.getElementById('messages');
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message system';
-                
-                if (type === 'error') {
-                    messageElement.style.backgroundColor = '#f8d7da';
-                    messageElement.style.borderColor = '#f5c6cb';
-                }
-                
-                const now = new Date();
-                const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
-                
-                messageElement.innerHTML = `
-                    <div class="message-text">${text}</div>
-                    <div class="message-time">${timeString}</div>
-                `;
-                
-                messagesContainer.appendChild(messageElement);
-                messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }
-            
             async joinAudio() {
                 try {
+                    // درخواست دسترسی به میکروفون
                     this.localStream = await navigator.mediaDevices.getUserMedia({ 
                         audio: {
                             echoCancellation: true,
@@ -876,14 +1144,32 @@
                         } 
                     });
                     
+                    // ایجاد AudioContext برای پردازش صدا
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const source = this.audioContext.createMediaStreamSource(this.localStream);
+                    
+                    // ایجاد destination برای خروجی
+                    const destination = this.audioContext.createMediaStreamDestination();
+                    source.connect(destination);
+                    
                     this.isJoined = true;
                     this.updateAudioUI();
                     this.addSystemMessage('شما به گفتگوی صوتی پیوستید.');
+                    
+                    // شبیه‌سازی اتصال صوتی
+                    this.simulateAudioConnection();
                     
                 } catch (error) {
                     console.error('خطا در دسترسی به میکروفون:', error);
                     this.addSystemMessage('خطا در دسترسی به میکروفون. لطفا مجوزها را بررسی کنید.', 'error');
                 }
+            }
+            
+            simulateAudioConnection() {
+                // در نسخه واقعی، اینجا WebRTC اجرا می‌شود
+                setTimeout(() => {
+                    this.addSystemMessage('اتصال صوتی برقرار شد.');
+                }, 1000);
             }
             
             toggleMute() {
@@ -927,6 +1213,11 @@
                     this.localStream = null;
                 }
                 
+                if (this.audioContext) {
+                    this.audioContext.close();
+                    this.audioContext = null;
+                }
+                
                 this.isJoined = false;
                 this.isMuted = false;
                 this.updateAudioUI();
@@ -937,6 +1228,107 @@
                 document.getElementById('joinAudio').disabled = this.isJoined;
                 document.getElementById('muteButton').disabled = !this.isJoined;
                 document.getElementById('leaveAudio').disabled = !this.isJoined;
+            }
+            
+            sendMessage() {
+                // اگر کاربر تایید نشده است، نمی‌تواند پیام بفرستد
+                if (this.currentUser && !this.currentUser.approved) {
+                    this.showNotification('شما هنوز تایید نشده‌اید. لطفا منتظر بمانید.');
+                    return;
+                }
+                
+                const messageInput = document.getElementById('messageInput');
+                const messageText = messageInput.value.trim();
+                
+                if (messageText) {
+                    const studentColorClass = this.studentColors[this.currentUser.id] || '';
+                    this.addMessage(messageText, this.currentUser.name, true, this.isTeacher, studentColorClass);
+                    messageInput.value = '';
+                    
+                    // شبیه‌سازی پاسخ سایر کاربران
+                    this.simulateReply(messageText);
+                }
+            }
+            
+            addMessage(text, sender, isSent = false, isTeacher = false, colorClass = '') {
+                const messagesContainer = document.getElementById('messages');
+                const messageElement = document.createElement('div');
+                messageElement.className = `message ${isSent ? 'sent' : 'received'} ${isTeacher ? 'teacher-message' : ''} ${colorClass}`;
+                
+                const now = new Date();
+                const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                messageElement.innerHTML = `
+                    <div class="message-sender">${sender} ${isTeacher ? '(استاد)' : ''}</div>
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            addSystemMessage(text, type = 'info') {
+                const messagesContainer = document.getElementById('messages');
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message system';
+                
+                if (type === 'error') {
+                    messageElement.style.backgroundColor = '#f8d7da';
+                    messageElement.style.borderColor = '#f5c6cb';
+                }
+                
+                const now = new Date();
+                const timeString = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                messageElement.innerHTML = `
+                    <div class="message-text">${text}</div>
+                    <div class="message-time">${timeString}</div>
+                `;
+                
+                messagesContainer.appendChild(messageElement);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            simulateReply(originalMessage) {
+                setTimeout(() => {
+                    // فقط اگر کاربر استاد نباشد پاسخ شبیه‌سازی می‌شود
+                    if (!this.isTeacher && this.approvedStudents.length > 0) {
+                        const randomStudent = this.approvedStudents[Math.floor(Math.random() * this.approvedStudents.length)];
+                        const replies = this.generateReplies(originalMessage);
+                        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                        const studentColorClass = this.studentColors[randomStudent.id] || '';
+                        
+                        this.addMessage(randomReply, randomStudent.name, false, false, studentColorClass);
+                    }
+                }, 1000 + Math.random() * 3000);
+            }
+            
+            generateReplies(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                if (lowerMessage.includes('سوال') || lowerMessage.includes('؟')) {
+                    return [
+                        'سوال خوبیه!',
+                        'منم همین سوال رو دارم',
+                        'می‌تونی بیشتر توضیح بدی؟',
+                        'استاد لطفا راهنمایی کنید'
+                    ];
+                } else if (lowerMessage.includes('تکلیف') || lowerMessage.includes('تمرین')) {
+                    return [
+                        'تکلیف رو انجام دادید؟',
+                        'سوال ۳ خیلی سخته!',
+                        'چه زمانی باید تحویل بدیم؟',
+                        'کسی می‌تونه کمکم کنه؟'
+                    ];
+                } else {
+                    return [
+                        'ممنون از پیامت!',
+                        'خیلی جالبه',
+                        'منم همین نظر رو دارم',
+                        'چه ایده خوبی'
+                    ];
+                }
             }
             
             copyInviteLink() {
@@ -954,6 +1346,45 @@
                 }
             }
             
+            viewAttendanceReport() {
+                if (!this.isTeacher) return;
+                
+                let report = 'گزارش حضور و غیاب کلاس\n';
+                report += 'تاریخ: ' + new Date().toLocaleDateString('fa-IR') + '\n\n';
+                
+                report += 'نام\tنقش\tشماره دانش‌آموزی\tزمان ورود\n';
+                
+                this.attendance.forEach(record => {
+                    if (record.action === 'join') {
+                        report += `${record.userName}\t${record.userRole === 'teacher' ? 'استاد' : 'دانش‌آموز'}\t${record.studentId || '-'}\t${record.timeString}\n`;
+                    }
+                });
+                
+                alert(report);
+            }
+            
+            downloadAttendanceReport() {
+                if (!this.isTeacher) return;
+                
+                let csv = 'نام,نقش,شماره دانش‌آموزی,زمان ورود\n';
+                
+                this.attendance.forEach(record => {
+                    if (record.action === 'join') {
+                        csv += `"${record.userName}","${record.userRole === 'teacher' ? 'استاد' : 'دانش‌آموز'}","${record.studentId || '-'}","${record.timeString}"\n`;
+                    }
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', `attendance-${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
             showNotification(message) {
                 const notification = document.getElementById('notification');
                 notification.textContent = message;
@@ -963,68 +1394,16 @@
                     notification.style.display = 'none';
                 }, 3000);
             }
-            
-            addPendingStudent(student) {
-                const pendingUsersList = document.getElementById('pendingUsersList');
-                const pendingUsersSection = document.getElementById('pendingUsersSection');
-                
-                const pendingUserElement = document.createElement('div');
-                pendingUserElement.className = 'pending-user';
-                pendingUserElement.innerHTML = `
-                    <div>${student.name}</div>
-                    <div>
-                        <button class="reject-btn" data-userid="${student.id}">رد</button>
-                        <button class="approve-btn" data-userid="${student.id}">تایید</button>
-                    </div>
-                `;
-                
-                pendingUsersList.appendChild(pendingUserElement);
-                pendingUsersSection.classList.remove('hidden');
-                
-                pendingUserElement.querySelector('.approve-btn').addEventListener('click', (e) => {
-                    const userId = e.target.getAttribute('data-userid');
-                    this.socket.emit('approve-student', { studentId: userId });
-                    pendingUserElement.remove();
-                });
-                
-                pendingUserElement.querySelector('.reject-btn').addEventListener('click', (e) => {
-                    const userId = e.target.getAttribute('data-userid');
-                    pendingUserElement.remove();
-                    this.addSystemMessage(`درخواست ${student.name} رد شد.`);
-                });
-            }
-            
-            enableChatFeatures() {
-                document.getElementById('messageInput').disabled = false;
-                document.getElementById('sendButton').disabled = false;
-            }
-            
-            viewAttendanceReport() {
-                if (!this.isTeacher) return;
-                alert('گزارش حضور و غیاب - این قابلیت در نسخه کامل فعال می‌شود');
-            }
-            
-            downloadAttendanceReport() {
-                if (!this.isTeacher) return;
-                alert('دانلود گزارش - این قابلیت در نسخه کامل فعال می‌شود');
-            }
-            
-            updateAttendance() {
-                // به روزرسانی لیست حضور
-            }
-            
-            updateAttendanceList(attendance) {
-                // به روزرسانی لیست حضور از سرور
-            }
         }
 
         // راه‌اندازی برنامه
         document.addEventListener('DOMContentLoaded', () => {
             window.onlineClass = new OnlineClass();
             
+            // ثبت خروج کاربر هنگام بستن صفحه
             window.addEventListener('beforeunload', () => {
                 if (window.onlineClass.currentUser) {
-                    window.onlineClass.socket.emit('user-left', window.onlineClass.currentUser);
+                    window.onlineClass.recordAttendance(window.onlineClass.currentUser, 'leave');
                 }
             });
         });
