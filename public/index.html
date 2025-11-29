@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کلاس آنلاین - جلسه آموزشی ریاضی</title>
+    <title>کلاس آنلاین ریاضی پایه دهم - سیستم احراز هویت</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #3498db;
@@ -14,89 +15,316 @@
             --light: #ecf0f1;
             --dark: #34495e;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             height: 100vh;
-            overflow: hidden;
-        }
-        
-        .classroom-container {
             display: flex;
-            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            width: 95%;
+            height: 95vh;
             background: white;
-            margin: 10px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
             overflow: hidden;
         }
-        
-        /* نوار کناری */
-        .sidebar {
-            width: 320px;
-            background: var(--secondary);
+
+        /* صفحه ورود */
+        .login-section {
+            flex: 1;
+            background: linear-gradient(135deg, var(--secondary), var(--dark));
             color: white;
             display: flex;
             flex-direction: column;
-            border-left: 1px solid #4a6278;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
         }
-        
-        .class-header {
-            padding: 20px;
-            background: var(--dark);
+
+        .login-form {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-title {
             text-align: center;
-            border-bottom: 2px solid var(--primary);
+            margin-bottom: 40px;
         }
-        
-        .class-header h1 {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
+
+        .login-title h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+
+        .login-title p {
+            color: #bdc3c7;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: var(--light);
         }
-        
-        .class-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .form-group input::placeholder {
             color: #bdc3c7;
         }
-        
-        .participants-section {
+
+        .role-selection {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .role-option {
             flex: 1;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .role-option:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .role-option.active {
+            border-color: var(--primary);
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        .role-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .btn-login {
+            width: 100%;
             padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* محیط کلاس */
+        .classroom-section {
+            flex: 2;
+            display: none;
+            flex-direction: column;
+            background: #f8f9fa;
+        }
+
+        /* هدر کلاس */
+        .class-header {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .class-info h2 {
+            color: var(--secondary);
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .class-meta {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-details {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .user-role {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+        }
+
+        /* محتوای اصلی */
+        .main-content {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* منطقه ویدیو */
+        .video-area {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .main-video {
+            flex: 2;
+            background: var(--dark);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .video-placeholder {
+            text-align: center;
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .participants-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .participant-video {
+            background: var(--secondary);
+            border-radius: 10px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+        }
+
+        .video-label {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        /* پنل کناری */
+        .sidebar {
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+
+        .participants-list {
+            flex: 1;
+            padding: 20px;
             overflow-y: auto;
         }
-        
-        .section-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #4a6278;
-            color: var(--light);
-        }
-        
-        .participant {
+
+        .participant-item {
             display: flex;
             align-items: center;
             padding: 12px;
-            margin-bottom: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
             transition: all 0.3s ease;
         }
-        
-        .participant:hover {
-            background: rgba(255,255,255,0.2);
+
+        .participant-item:hover {
+            background: #e9ecef;
             transform: translateX(-5px);
         }
-        
+
         .participant-avatar {
             width: 40px;
             height: 40px;
@@ -106,185 +334,58 @@
             align-items: center;
             justify-content: center;
             margin-left: 12px;
+            color: white;
             font-weight: bold;
             font-size: 1.1rem;
-            color: white;
         }
-        
-        .participant-info {
+
+        .participant-details {
             flex: 1;
         }
-        
+
         .participant-name {
             font-weight: 600;
+            color: var(--secondary);
             margin-bottom: 3px;
         }
-        
+
         .participant-status {
             font-size: 0.8rem;
-            color: #bdc3c7;
+            color: #7f8c8d;
             display: flex;
             align-items: center;
         }
-        
-        .status-indicator {
+
+        .status-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             background: var(--success);
             margin-left: 5px;
         }
-        
+
         .teacher .participant-avatar {
             background: linear-gradient(45deg, var(--danger), #e67e22);
         }
-        
-        /* محتوای اصلی */
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background: #f8f9fa;
-        }
-        
-        /* هدر اصلی */
-        .main-header {
-            padding: 15px 25px;
-            background: white;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .class-title h2 {
-            color: var(--secondary);
-            font-size: 1.4rem;
-        }
-        
-        .class-meta {
-            color: #7f8c8d;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-        
-        .header-controls {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .control-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-        
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        /* منطقه ویدیو */
-        .video-area {
-            flex: 1;
-            display: flex;
-            padding: 20px;
-            gap: 20px;
-        }
-        
-        .main-video {
-            flex: 3;
-            background: var(--dark);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-        
-        .video-placeholder {
-            text-align: center;
-            color: white;
-        }
-        
-        .video-placeholder i {
-            font-size: 4rem;
-            margin-bottom: 15px;
-            opacity: 0.7;
-        }
-        
-        .participant-videos {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .small-video {
-            background: var(--secondary);
-            border-radius: 8px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-        }
-        
-        .video-label {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: rgba(0,0,0,0.7);
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        
-        /* کنترل‌های پایین */
+
+        /* کنترل‌ها */
         .controls-bar {
-            padding: 15px 25px;
+            padding: 20px;
             background: white;
             border-top: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .media-controls {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
-        
-        .media-btn {
-            width: 50px;
-            height: 50px;
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: none;
             background: var(--light);
@@ -292,435 +393,352 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: all 0.3s ease;
             color: var(--dark);
         }
-        
-        .media-btn.active {
+
+        .control-btn.active {
             background: var(--primary);
             color: white;
         }
-        
-        .media-btn:hover {
+
+        .control-btn:hover {
             transform: scale(1.1);
         }
-        
+
         .end-call {
             background: var(--danger);
             color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
+            padding: 15px 30px;
+            border-radius: 30px;
             border: none;
             cursor: pointer;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             transition: all 0.3s ease;
         }
-        
+
         .end-call:hover {
             background: #c0392b;
             transform: translateY(-2px);
         }
-        
-        /* پنل چت */
-        .chat-panel {
-            width: 350px;
-            background: white;
-            border-right: 1px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .chat-header {
-            padding: 20px;
-            background: var(--primary);
-            color: white;
-            text-align: center;
-        }
-        
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background: #f8f9fa;
-        }
-        
-        .message {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .message-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 10px;
-            font-weight: bold;
-            color: white;
-            font-size: 0.9rem;
-        }
-        
-        .message-content {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            max-width: 80%;
-        }
-        
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .message-sender {
-            font-weight: 600;
-            color: var(--secondary);
-        }
-        
-        .message-time {
-            font-size: 0.8rem;
-            color: #7f8c8d;
-        }
-        
-        .system-message {
-            text-align: center;
-            color: #7f8c8d;
-            font-style: italic;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-        
-        .chat-input {
-            padding: 15px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .chat-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 25px;
-            outline: none;
-            font-size: 1rem;
-        }
-        
-        .chat-input input:focus {
-            border-color: var(--primary);
-        }
-        
-        .send-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .send-btn:hover {
-            background: #2980b9;
-            transform: scale(1.1);
-        }
-        
+
         /* انیمیشن‌ها */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        
-        .pulse {
-            animation: pulse 2s infinite;
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
-        
+
         /* واکنش‌گرایی */
-        @media (max-width: 1200px) {
-            .chat-panel {
-                width: 300px;
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
             }
             
             .sidebar {
-                width: 280px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .classroom-container {
-                flex-direction: column;
-                margin: 5px;
-            }
-            
-            .sidebar, .chat-panel {
                 width: 100%;
-                height: 200px;
-            }
-            
-            .video-area {
-                flex-direction: column;
+                height: 300px;
             }
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="classroom-container">
-        <!-- پنل چت -->
-        <div class="chat-panel">
-            <div class="chat-header">
-                <h3><i class="fas fa-comments"></i> گفتگوی کلاس</h3>
-            </div>
-            <div class="chat-messages">
-                <div class="system-message">به گفتگوی کلاس خوش آمدید</div>
-                <div class="system-message">نیما به کلاس پیوست</div>
-                
-                <div class="message">
-                    <div class="message-avatar">ز</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-sender">زیرما</span>
-                            <span class="message-time">۲۱:۵۶</span>
-                        </div>
-                        <div class="message-text">سلام به همه دانش‌آموزان عزیز. لطفا میکروفون خود را در صورت عدم نیاز خاموش کنید.</div>
-                    </div>
+    <div class="container">
+        <!-- صفحه ورود -->
+        <div class="login-section fade-in">
+            <div class="login-form">
+                <div class="login-title">
+                    <h1><i class="fas fa-chalkboard-teacher"></i> کلاس آنلاین ریاضی</h1>
+                    <p>پایه دهم - دبیرستان نمونه</p>
                 </div>
-                
-                <div class="message">
-                    <div class="message-avatar">ن</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-sender">نیما</span>
-                            <span class="message-time">۲۱:۵۷</span>
-                        </div>
-                        <div class="message-text">سلام استاد. سوالی از تمرین صفحه ۴۵ دارم.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-input">
-                <input type="text" placeholder="پیام خود را بنویسید...">
-                <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-        
-        <!-- محتوای اصلی -->
-        <div class="main-content">
-            <div class="main-header">
-                <div class="class-title">
-                    <h2><i class="fas fa-chalkboard-teacher"></i> کلاس آنلاین - جلسه آموزشی ریاضی</h2>
-                    <div class="class-meta">
-                        <span><i class="fas fa-clock"></i> شروع: ۲۱:۵۰ | </span>
-                        <span><i class="fas fa-users"></i> شرکت‌کنندگان: ۸ نفر</span>
-                    </div>
-                </div>
-                <div class="header-controls">
-                    <button class="control-btn btn-success">
-                        <i class="fas fa-record-vinyl"></i> ضبط جلسه
-                    </button>
-                    <button class="control-btn btn-primary">
-                        <i class="fas fa-share"></i> اشتراک‌گذاری
-                    </button>
-                </div>
-            </div>
-            
-            <div class="video-area">
-                <div class="main-video">
-                    <div class="video-placeholder">
+
+                <div class="role-selection">
+                    <div class="role-option active" onclick="selectRole('teacher')">
                         <i class="fas fa-user-tie"></i>
-                        <h3>استاد زیرما</h3>
-                        <p>اتصال برقرار است</p>
+                        <div>استاد</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole('student')">
+                        <i class="fas fa-user-graduate"></i>
+                        <div>دانش‌آموز</div>
                     </div>
                 </div>
-                
-                <div class="participant-videos">
-                    <div class="small-video">
-                        <i class="fas fa-user"></i>
-                        <div class="video-label">نیما</div>
-                    </div>
-                    <div class="small-video">
-                        <i class="fas fa-user"></i>
-                        <div class="video-label">فاطمه</div>
-                    </div>
-                    <div class="small-video">
-                        <i class="fas fa-user"></i>
-                        <div class="video-label">محمد</div>
-                    </div>
-                    <div class="small-video">
-                        <i class="fas fa-user-plus"></i>
-                        <div class="video-label">+ بیشتر</div>
-                    </div>
+
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> نام کاربری</label>
+                    <input type="text" id="username" placeholder="نام کاربری خود را وارد کنید">
                 </div>
-            </div>
-            
-            <div class="controls-bar">
-                <div class="media-controls">
-                    <button class="media-btn active">
-                        <i class="fas fa-microphone"></i>
-                    </button>
-                    <button class="media-btn active">
-                        <i class="fas fa-video"></i>
-                    </button>
-                    <button class="media-btn">
-                        <i class="fas fa-desktop"></i>
-                    </button>
-                    <button class="media-btn">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="media-btn">
-                        <i class="fas fa-hand-paper"></i>
-                    </button>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> رمز عبور</label>
+                    <input type="password" id="password" placeholder="رمز عبور خود را وارد کنید">
                 </div>
-                
-                <button class="end-call">
-                    <i class="fas fa-phone-slash"></i> پایان تماس
+
+                <div class="form-group" id="studentCodeGroup" style="display: none;">
+                    <label for="studentCode"><i class="fas fa-id-card"></i> کد دانش‌آموزی</label>
+                    <input type="text" id="studentCode" placeholder="کد ۶ رقمی دانش‌آموزی">
+                </div>
+
+                <button class="btn-login" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> ورود به کلاس
                 </button>
             </div>
         </div>
-        
-        <!-- نوار کناری -->
-        <div class="sidebar">
+
+        <!-- محیط کلاس (پس از ورود) -->
+        <div class="classroom-section" id="classroom">
             <div class="class-header">
-                <h1>کلاس ریاضی پایه دهم</h1>
                 <div class="class-info">
-                    <span>استاد: زیرما</span>
-                    <span>۲۱:۵۶</span>
+                    <h2><i class="fas fa-calculator"></i> کلاس ریاضی پایه دهم</h2>
+                    <div class="class-meta">
+                        <span id="currentTime"></span> | 
+                        <span id="participantCount">شرکت‌کنندگان: ۱ نفر</span>
+                    </div>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">ز</div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">زیرما</div>
+                        <div class="user-role" id="userRole">استاد</div>
+                    </div>
                 </div>
             </div>
-            
-            <div class="participants-section">
-                <h3 class="section-title"><i class="fas fa-users"></i> شرکت‌کنندگان (۸)</h3>
-                
-                <div class="participant teacher">
-                    <div class="participant-avatar">ز</div>
-                    <div class="participant-info">
-                        <div class="participant-name">زیرما</div>
-                        <div class="participant-status">
-                            استاد
-                            <span class="status-indicator"></span>
+
+            <div class="main-content">
+                <div class="video-area">
+                    <div class="main-video">
+                        <div class="video-placeholder">
+                            <i class="fas fa-user-tie"></i>
+                            <h3 id="mainVideoName">استاد زیرما</h3>
+                            <p>اتصال برقرار است</p>
                         </div>
                     </div>
-                    <i class="fas fa-crown" style="color: #f1c40f;"></i>
-                </div>
-                
-                <div class="participant">
-                    <div class="participant-avatar">ن</div>
-                    <div class="participant-info">
-                        <div class="participant-name">نیما</div>
-                        <div class="participant-status">
-                            آنلاین
-                            <span class="status-indicator"></span>
-                        </div>
+                    <div class="participants-grid" id="participantsGrid">
+                        <!-- دانش‌آموزان به صورت داینامیک اضافه می‌شوند -->
                     </div>
                 </div>
-                
-                <div class="participant">
-                    <div class="participant-avatar">ف</div>
-                    <div class="participant-info">
-                        <div class="participant-name">فاطمه کریمی</div>
-                        <div class="participant-status">
-                            آنلاین
-                            <span class="status-indicator"></span>
-                        </div>
+
+                <div class="sidebar">
+                    <div class="sidebar-header">
+                        <h3><i class="fas fa-users"></i> لیست شرکت‌کنندگان</h3>
+                        <p id="onlineCount">آنلاین: ۱ نفر</p>
+                    </div>
+                    <div class="participants-list" id="participantsList">
+                        <!-- لیست شرکت‌کنندگان -->
                     </div>
                 </div>
-                
-                <div class="participant">
-                    <div class="participant-avatar">م</div>
-                    <div class="participant-info">
-                        <div class="participant-name">محمد رضایی</div>
-                        <div class="participant-status">
-                            آنلاین
-                            <span class="status-indicator"></span>
-                        </div>
-                    </div>
+            </div>
+
+            <div class="controls-bar">
+                <div class="media-controls">
+                    <button class="control-btn active" onclick="toggleAudio()">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-btn active" onclick="toggleVideo()">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-btn" onclick="shareScreen()">
+                        <i class="fas fa-desktop"></i>
+                    </button>
+                    <button class="control-btn" onclick="openWhiteboard()">
+                        <i class="fas fa-chalkboard"></i>
+                    </button>
                 </div>
-                
-                <div class="participant">
-                    <div class="participant-avatar">ا</div>
-                    <div class="participant-info">
-                        <div class="participant-name">امیر حسینی</div>
-                        <div class="participant-status">
-                            در انتظار
-                            <span class="status-indicator" style="background: #f39c12;"></span>
-                        </div>
-                    </div>
-                </div>
+                <button class="end-call" onclick="endCall()">
+                    <i class="fas fa-phone-slash"></i> خروج از کلاس
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // شبیه‌سازی عملکردهای واقعی
-        document.querySelector('.send-btn').addEventListener('click', sendMessage);
-        document.querySelector('.chat-input input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') sendMessage();
-        });
-        
-        function sendMessage() {
-            const input = document.querySelector('.chat-input input');
-            const message = input.value.trim();
+        // داده‌های واقعی دانش‌آموزان
+        const students = [
+            { id: 1, code: "123456", name: "نیما احمدی", avatar: "ن", present: true },
+            { id: 2, code: "234567", name: "فاطمه کریمی", avatar: "ف", present: false },
+            { id: 3, code: "345678", name: "محمد رضایی", avatar: "م", present: false },
+            { id: 4, code: "456789", name: "امیر حسینی", avatar: "ا", present: false },
+            { id: 5, code: "567890", name: "زهرا محمدی", avatar: "ز", present: false },
+            { id: 6, code: "678901", name: "علی رحیمی", avatar: "ع", present: false }
+        ];
+
+        let currentUser = null;
+        let currentRole = 'teacher';
+
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-option').forEach(opt => opt.classList.remove('active'));
+            event.currentTarget.classList.add('active');
             
-            if (message) {
-                const chatMessages = document.querySelector('.chat-messages');
-                const time = new Date().toLocaleTimeString('fa-IR', { 
-                    hour: '2-digit', minute: '2-digit' 
-                });
-                
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                messageDiv.innerHTML = `
-                    <div class="message-avatar">ش</div>
-                    <div class="message-content">
-                        <div class="message-header">
-                            <span class="message-sender">شما</span>
-                            <span class="message-time">${time}</span>
-                        </div>
-                        <div class="message-text">${message}</div>
-                    </div>
-                `;
-                
-                chatMessages.appendChild(messageDiv);
-                input.value = '';
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
+            const studentCodeGroup = document.getElementById('studentCodeGroup');
+            studentCodeGroup.style.display = role === 'student' ? 'block' : 'none';
         }
-        
-        // شبیه‌سازی کنترل‌های رسانه
-        document.querySelectorAll('.media-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
-        });
-        
-        // شبیه‌سازی وضعیت آنلاین
-        setInterval(() => {
-            const indicators = document.querySelectorAll('.status-indicator');
-            indicators.forEach(indicator => {
-                if (Math.random() > 0.8) {
-                    indicator.style.animation = 'pulse 1s infinite';
-                    setTimeout(() => {
-                        indicator.style.animation = '';
-                    }, 1000);
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const studentCode = document.getElementById('studentCode').value;
+
+            if (!username || !password) {
+                alert('لطفاً نام کاربری و رمز عبور را وارد کنید');
+                return;
+            }
+
+            if (currentRole === 'student') {
+                if (!studentCode) {
+                    alert('لطفاً کد دانش‌آموزی را وارد کنید');
+                    return;
+                }
+
+                const student = students.find(s => s.code === studentCode && s.name.includes(username));
+                if (!student) {
+                    alert('کد دانش‌آموزی یا نام کاربری معتبر نیست');
+                    return;
+                }
+
+                currentUser = student;
+                student.present = true;
+            } else {
+                // استاد
+                currentUser = {
+                    id: 0,
+                    name: username,
+                    avatar: username.charAt(0),
+                    role: 'teacher'
+                };
+            }
+
+            // نمایش محیط کلاس
+            document.querySelector('.login-section').style.display = 'none';
+            document.getElementById('classroom').style.display = 'flex';
+
+            // به‌روزرسانی اطلاعات کاربر
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.avatar;
+            document.getElementById('userRole').textContent = currentRole === 'teacher' ? 'استاد' : 'دانش‌آموز';
+            document.getElementById('mainVideoName').textContent = currentUser.name;
+
+            // به‌روزرسانی لیست دانش‌آموزان
+            updateParticipantsList();
+            updateTime();
+        }
+
+        function updateParticipantsList() {
+            const participantsList = document.getElementById('participantsList');
+            const participantsGrid = document.getElementById('participantsGrid');
+            
+            participantsList.innerHTML = '';
+            participantsGrid.innerHTML = '';
+
+            // اضافه کردن استاد
+            if (currentRole === 'teacher') {
+                const teacherItem = createParticipantItem(currentUser, true);
+                participantsList.appendChild(teacherItem);
+            }
+
+            // اضافه کردن دانش‌آموزان
+            students.forEach(student => {
+                if (student.present) {
+                    const studentItem = createParticipantItem(student, false);
+                    participantsList.appendChild(studentItem);
+
+                    const videoElement = createVideoElement(student);
+                    participantsGrid.appendChild(videoElement);
                 }
             });
+
+            // به‌روزرسانی آمار
+            const presentCount = students.filter(s => s.present).length + 1;
+            document.getElementById('participantCount').textContent = `شرکت‌کنندگان: ${presentCount} نفر`;
+            document.getElementById('onlineCount').textContent = `آنلاین: ${presentCount} نفر`;
+        }
+
+        function createParticipantItem(user, isTeacher) {
+            const div = document.createElement('div');
+            div.className = `participant-item ${isTeacher ? 'teacher' : ''}`;
+            div.innerHTML = `
+                <div class="participant-avatar">${user.avatar}</div>
+                <div class="participant-details">
+                    <div class="participant-name">${user.name}</div>
+                    <div class="participant-status">
+                        ${isTeacher ? 'استاد' : 'دانش‌آموز'}
+                        <span class="status-dot"></span>
+                    </div>
+                </div>
+            `;
+            return div;
+        }
+
+        function createVideoElement(user) {
+            const div = document.createElement('div');
+            div.className = 'participant-video';
+            div.innerHTML = `
+                <i class="fas fa-user"></i>
+                <div class="video-label">${user.name}</div>
+            `;
+            return div;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('fa-IR');
+            document.getElementById('currentTime').textContent = timeString;
+        }
+
+        // کنترل‌های رسانه
+        function toggleAudio() {
+            const btn = event.currentTarget;
+            btn.classList.toggle('active');
+        }
+
+        function toggleVideo() {
+            const btn = event.currentTarget;
+            btn.classList.toggle('active');
+        }
+
+        function shareScreen() {
+            alert('اشتراک‌گذاری صفحه فعال شد');
+        }
+
+        function openWhiteboard() {
+            alert('تخته سفید باز شد');
+        }
+
+        function endCall() {
+            if (confirm('آیا از خروج از کلاس مطمئنید؟')) {
+                document.getElementById('classroom').style.display = 'none';
+                document.querySelector('.login-section').style.display = 'flex';
+                
+                // بازنشانی وضعیت
+                students.forEach(s => s.present = false);
+                currentUser = null;
+            }
+        }
+
+        // به‌روزرسانی زمان هر ثانیه
+        setInterval(updateTime, 1000);
+
+        // شبیه‌سازی ورود دانش‌آموزان
+        setTimeout(() => {
+            if (currentUser) {
+                students[1].present = true; // فاطمه کریمی
+                students[2].present = true; // محمد رضایی
+                updateParticipantsList();
+            }
         }, 3000);
+
+        setTimeout(() => {
+            if (currentUser) {
+                students[3].present = true; // امیر حسینی
+                updateParticipantsList();
+            }
+        }, 6000);
     </script>
 </body>
 </html>
